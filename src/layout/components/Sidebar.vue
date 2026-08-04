@@ -1,30 +1,37 @@
 <template>
   <div class="layout-sidebar">
     <el-scrollbar>
-      <el-menu :default-openeds="['1', '3']" class="custom-menu" background-color="transparent"
+      <el-menu router :default-active="'/customers'" class="custom-menu" background-color="transparent"
         text-color="#e0e6ed" active-text-color="#ffffff" :collapse="false">
-        <el-sub-menu index="1">
+        <el-menu-item index="/dashboard">
+          <el-icon>
+            <Odometer />
+          </el-icon> <!-- 可选图标 -->
+          <span>Dashboard</span>
+        </el-menu-item>
+
+        <el-sub-menu index="2">
           <template #title>
             <el-icon>
               <Message />
             </el-icon>交易管理
           </template>
           <el-menu-item-group>
-            <el-menu-item index="1-1">客户信息</el-menu-item>
-            <el-menu-item index="1-2">订单信息</el-menu-item>
+            <el-menu-item index="/customers">客户信息</el-menu-item>
+            <el-menu-item index="/orders">订单信息</el-menu-item>
           </el-menu-item-group>
 
         </el-sub-menu>
-        <el-sub-menu index="2">
+        <el-sub-menu index="3">
           <template #title>
             <el-icon>
               <Menu />
             </el-icon>系统管理
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1">用户管理</el-menu-item>
-            <el-menu-item index="2-2">角色管理</el-menu-item>
-            <el-menu-item index="2-3">菜单管理</el-menu-item>
+            <el-menu-item index="3-1">用户管理</el-menu-item>
+            <el-menu-item index="3-2">角色管理</el-menu-item>
+            <el-menu-item index="3-3">菜单管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
       </el-menu>
@@ -39,9 +46,11 @@
 <style lang="scss" scoped>
 .layout-sidebar {
   height: 100%;
-  .custom-menu{
+
+  .custom-menu {
     border-right: none !important;
   }
+
   /* 1. 父级菜单项 (Submenu Title) */
   .custom-menu :deep(.el-sub-menu__title) {
     color: rgba(255, 255, 255, 0.8) !important;
