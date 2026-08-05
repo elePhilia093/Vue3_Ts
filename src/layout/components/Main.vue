@@ -43,7 +43,7 @@ const key = computed(() => route.path);
   overflow-y: auto;
   
   /* 5. 限制最小高度，防止内容少时背景太短 */
-  min-height: calc(100vh - 60px); /* 减去 Header 的高度 */
+  height: 100%;
   
   /* 6. 设置盒模型 */
   box-sizing: border-box;
