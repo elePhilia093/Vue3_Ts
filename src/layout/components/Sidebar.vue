@@ -1,7 +1,7 @@
 <template>
   <div class="layout-sidebar">
     <el-scrollbar>
-      <el-menu router :default-active="'/customers'" class="custom-menu" background-color="transparent"
+      <el-menu router :default-active="$route.path" class="custom-menu" background-color="transparent"
         text-color="#e0e6ed" active-text-color="#ffffff" :collapse="false">
         <el-menu-item index="/dashboard">
           <el-icon>
@@ -10,28 +10,28 @@
           <span>Dashboard</span>
         </el-menu-item>
 
-        <el-sub-menu index="2">
+        <el-sub-menu index="/trade">
           <template #title>
             <el-icon>
               <Message />
             </el-icon>交易管理
           </template>
           <el-menu-item-group>
-            <el-menu-item index="/customers">客户信息</el-menu-item>
-            <el-menu-item index="/orders">订单信息</el-menu-item>
+            <el-menu-item index="/trade/customers">客户信息</el-menu-item>
+            <el-menu-item index="/trade/orders">订单信息</el-menu-item>
           </el-menu-item-group>
 
         </el-sub-menu>
-        <el-sub-menu index="3">
+        <el-sub-menu index="/system">
           <template #title>
             <el-icon>
               <Menu />
             </el-icon>系统管理
           </template>
           <el-menu-item-group>
-            <el-menu-item index="3-1">用户管理</el-menu-item>
-            <el-menu-item index="3-2">角色管理</el-menu-item>
-            <el-menu-item index="3-3">菜单管理</el-menu-item>
+            <el-menu-item index="/system/user">用户管理</el-menu-item>
+            <el-menu-item index="/system/role">角色管理</el-menu-item>
+            <el-menu-item index="/system/menu">菜单管理</el-menu-item>
           </el-menu-item-group>
         </el-sub-menu>
       </el-menu>

@@ -33,7 +33,7 @@
         <el-table 
           :data="tableData" 
           style="width: 100%" 
-          height="400px"
+          height="100%"
           border
           stripe
         >
@@ -130,10 +130,11 @@ const resetQuery = () => queryParams.keyword = '';
 
 /* 表格包装器：核心！利用 flex:1 占据剩余所有空间 */
 .table-wrapper {
+  height: 100%;
   flex: 1;
   padding: 20px;
   overflow: hidden; /* 隐藏溢出，让 el-table 内部处理滚动 */
-  height: 400px; /* 关键：允许 flex 子项收缩到比内容更小 */
+  min-height: 400px; /* 关键：允许 flex 子项收缩到比内容更小 */
 }
 
 /* 分页器区域 */

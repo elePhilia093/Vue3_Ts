@@ -22,12 +22,15 @@ service.interceptors.response.use(
     if(response instanceof Blob){
       return response
     }
+    
+    
     const res = response.data
-    if(res.code !== 200){
-      ElMessage.error(res.msg || '请求失败')
-      return Promise.reject(res)
-    }
-    return res.data
+    
+    // if(res.code !== 200){
+    //   ElMessage.error(res.msg || '请求失败')
+    //   return Promise.reject(res)
+    // }
+    return res.data || res
   },
   (error) => {
     ElMessage.error(error.message)
