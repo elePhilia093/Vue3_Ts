@@ -47,11 +47,6 @@
             />
           </el-form-item>
 
-          <div class="form-actions">
-            <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
-            <el-link type="primary" :underline="false">忘记密码？</el-link>
-          </div>
-
           <el-button
             type="primary"
             class="login-btn"
@@ -61,10 +56,6 @@
             {{ loading ? '验证中...' : '登 录' }}
           </el-button>
         </el-form>
-
-        <div class="form-footer">
-          还没有账号？<el-link type="primary" :underline="false">立即注册</el-link>
-        </div>
       </div>
     </div>
   </div>
@@ -73,7 +64,8 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-
+import {useRouter} from 'vue-router'
+const router = useRouter()
 interface LoginFormState {
   username: string;
   password: string;
@@ -102,11 +94,9 @@ const handleLogin = () => {
   loginFormRef.value.validate((valid) => {
     if (valid) {
       loading.value = true;
-      setTimeout(() => {
-        ElMessage.success('登录成功！');
+      ElMessage.success('登录成功！');
         loading.value = false;
-        // router.push('/dashboard');
-      }, 1500);
+        router.push('/dashboard');
     }
   });
 };

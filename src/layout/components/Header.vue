@@ -12,20 +12,40 @@
     <!-- 右侧：用户信息 -->
     <div class="header-right">
       <div class="user-profile">
-        <el-avatar 
-          :size="36" 
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" 
+        <el-avatar
+          :size="36"
+          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
           class="user-avatar"
         />
-        <span class="username">Admin User</span>
-        <el-icon class="arrow-down"><arrow-down /></el-icon>
+        <el-dropdown trigger="click" @command="handleCommand">
+          <span class="el-dropdown-link">
+            欢迎您：{{ '管理员' }}
+            <el-icon class="el-icon--right">
+              <arrow-down />
+            </el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown } from "@element-plus/icons-vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const handleCommand = (command: string) => {
+  console.log(command);
+  if (command === "logout") {
+    // 执行退出登录操作
+    router.push("/login");
+  }
+};
 </script>
 
 <style scoped>
