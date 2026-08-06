@@ -2,14 +2,20 @@ export interface User {
   id: number;
   username: string;
   nickname: string;
-  age: number;
-  gender: string;
   email: string;
-  password: string;
   phone: string;
-  dept_id: number;
-  create_time: string;
-  update_time: string;
+  status: number;
+  deptId: number | null;
+  createTime: string;
+  updateTime: string;
 }
 
-export type UserList = User[]
+export interface PageResult<T> {
+  records: T[]; // 数据列表
+  total: number; // 总记录数
+  size: number; // 每页条数
+  current: number; // 当前页码
+  pages: number; // 总页数
+}
+
+export type UserPageResult = PageResult<User>;

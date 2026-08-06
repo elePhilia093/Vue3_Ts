@@ -19,42 +19,27 @@
           <p>请输入您的账号信息以继续</p>
         </div>
 
-        <el-form
-          ref="loginFormRef"
-          :model="loginForm"
-          :rules="loginRules"
-          size="large"
-          class="modern-form"
-          @keyup.enter="handleLogin"
-        >
+        <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large" class="modern-form"
+          @keyup.enter="handleLogin">
           <el-form-item prop="username">
-            <el-input
-              v-model="loginForm.username"
-              placeholder="邮箱 / 手机号"
-              prefix-icon="User"
-              clearable
-            />
+            <el-input v-model="loginForm.username" placeholder="邮箱 / 手机号" prefix-icon="User" clearable />
           </el-form-item>
 
           <el-form-item prop="password">
-            <el-input
-              v-model="loginForm.password"
-              type="password"
-              placeholder="请输入密码"
-              prefix-icon="Lock"
-              show-password
-              clearable
-            />
+            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" prefix-icon="Lock" show-password
+              clearable />
           </el-form-item>
+          <div class="form-actions">
+            <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
+            <el-link type="primary" :underline="false">忘记密码？</el-link>
+          </div>
 
-          <el-button
-            type="primary"
-            class="login-btn"
-            :loading="loading"
-            @click="handleLogin"
-          >
+          <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">
             {{ loading ? '验证中...' : '登 录' }}
           </el-button>
+          <div class="form-footer">
+            还没有账号？<el-link type="primary" :underline="false">立即注册</el-link>
+          </div>
         </el-form>
       </div>
     </div>
@@ -64,7 +49,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 const router = useRouter()
 interface LoginFormState {
   username: string;
@@ -95,8 +80,8 @@ const handleLogin = () => {
     if (valid) {
       loading.value = true;
       ElMessage.success('登录成功！');
-        loading.value = false;
-        router.push('/dashboard');
+      loading.value = false;
+      router.push('/dashboard');
     }
   });
 };
@@ -224,13 +209,27 @@ const handleLogin = () => {
 
 /* 6. 动画定义 */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 7. 响应式适配（手机端隐藏左侧） */
@@ -238,9 +237,11 @@ const handleLogin = () => {
   .login-brand {
     display: none;
   }
+
   .login-form-wrapper {
     width: 100%;
-    background: #fff; /* 手机端不需要毛玻璃，直接纯白 */
+    background: #fff;
+    /* 手机端不需要毛玻璃，直接纯白 */
   }
 }
 </style>

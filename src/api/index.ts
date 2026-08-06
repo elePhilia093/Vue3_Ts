@@ -26,11 +26,11 @@ service.interceptors.response.use(
     
     const res = response.data
     
-    // if(res.code !== 200){
-    //   ElMessage.error(res.msg || '请求失败')
-    //   return Promise.reject(res)
-    // }
-    return res.data || res
+    if(res.code !== 200){
+      ElMessage.error(res.msg || '请求失败')
+      return Promise.reject(res)
+    }
+    return res.data 
   },
   (error) => {
     ElMessage.error(error.message)

@@ -1,11 +1,11 @@
 import request from './index'
 
-import type {UserList} from '@/types/user'
+import type {UserPageResult} from '@/types/user'
 
-export const fetchUserListAPI = (params: {}) => {
-  return request<UserList>({
+export const fetchUserListAPI = (data: {}) => {
+  return request<UserPageResult>({
     url: '/user/page',
-    method: 'get',
-    params,
+    method: 'post',
+    data,
   })
 }
