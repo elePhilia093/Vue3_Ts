@@ -71,7 +71,12 @@
         <el-table-column label="操作" width="150" align="center" fixed="right">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
+            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
+
+              <template #reference>
+                <el-button link type="danger" size="small">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -90,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { fetchUserListAPI } from "@/api/user";
+import { fetchUserListAPI, deleteUserAPI } from "@/api/user";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import UserFormDialog from './components/UserFormDialog.vue';
@@ -166,9 +171,14 @@ const handleEdit = (row: any) => {
 };
 
 // 删除用户
-const handleDelete = (row: any) => {
-  console.log("删除用户:", row);
-  // TODO: 调用后端接口 this.removeById(row.id)
+const handleDelete = async (row: any) => {
+  try {
+    await deleteUserAPI(row.id);
+    ElMessage.success('删除成功');
+    getList();
+  } catch (error) {
+    ElMessage.error('删除失败');
+  }
 };
 
 onMounted(() => {

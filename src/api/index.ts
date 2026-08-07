@@ -27,7 +27,7 @@ service.interceptors.response.use(
     const res = response.data
     
     if(res.code !== 200){
-      ElMessage.error(res.msg || '请求失败')
+      ElMessage.error(res.message || '请求失败')
       return Promise.reject(res)
     }
     return res.data 

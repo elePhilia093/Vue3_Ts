@@ -39,8 +39,8 @@
       <!-- 状态 -->
       <el-form-item label="状态" prop="status">
         <el-radio-group v-model="formData.status">
-          <el-radio value="1">正常</el-radio>
-          <el-radio value="0">禁用</el-radio>
+          <el-radio :value="1">正常</el-radio>
+          <el-radio :value="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -59,6 +59,7 @@
 <script setup>
 import { ref, reactive, watch, computed } from 'vue';
 import { ElMessage } from 'element-plus';
+import { addUserAPI, updateUserAPI } from '@/api/user';
 
 // 定义 Props
 const props = defineProps({
@@ -132,8 +133,8 @@ const handleSubmit = async () => {
       loading.value = true;
       try {
         // TODO: 在这里调用你的 API
-        // if (isEdit.value) await updateUser(formData);
-        // else await addUser(formData);
+        if (isEdit.value) await updateUserAPI(formData);
+        else await addUserAPI(formData);
         
         console.log('提交的数据:', JSON.parse(JSON.stringify(formData)));
         
