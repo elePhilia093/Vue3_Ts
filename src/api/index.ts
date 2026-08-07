@@ -30,6 +30,11 @@ service.interceptors.response.use(
       ElMessage.error(res.message || '请求失败')
       return Promise.reject(res)
     }
+
+    if(res.code == 200 && res.message && !res.data){
+      ElMessage.success(res.message)
+    }
+    
     return res.data 
   },
   (error) => {

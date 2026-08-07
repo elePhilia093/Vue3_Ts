@@ -174,7 +174,6 @@ const handleEdit = (row: any) => {
 const handleDelete = async (row: any) => {
   try {
     await deleteUserAPI(row.id);
-    ElMessage.success('删除成功');
     getList();
   } catch (error) {
     ElMessage.error('删除失败');
