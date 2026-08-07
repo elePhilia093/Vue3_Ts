@@ -1,6 +1,7 @@
 import request from './index'
 
-import type {UserPageResult} from '@/types/user'
+import type {UserPageResult, UpdateUserRequest} from '@/types/user'
+
 
 export const fetchUserListAPI = (data: {}) => {
   return request<UserPageResult>({
@@ -20,7 +21,7 @@ export const addUserAPI = (data: {}) => {
 }
 
 // 更新用户
-export const updateUserAPI = (data: {}) => {
+export const updateUserAPI = (data: UpdateUserRequest) => {
   return request({
     url: '/user/update',
     method: 'put',

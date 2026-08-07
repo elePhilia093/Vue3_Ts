@@ -19,3 +19,12 @@ export interface PageResult<T> {
 }
 
 export type UserPageResult = PageResult<User>;
+
+export interface UpdateUserRequest {
+  id: number | undefined;
+  username: string;
+  nickname: string;
+  email: string;
+  phone: string;
+  status: number;
+}

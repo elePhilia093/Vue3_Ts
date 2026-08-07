@@ -56,11 +56,12 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, reactive, watch, computed } from 'vue';
 import { ElMessage } from 'element-plus';
+import type { FormInstance } from 'element-plus'
 import { addUserAPI, updateUserAPI } from '@/api/user';
-
+import type { UpdateUserRequest } from '@/types/user';
 // 定义 Props
 const props = defineProps({
   modelValue: Boolean, // 控制弹窗显示隐藏
@@ -70,7 +71,7 @@ const props = defineProps({
 // 定义 Emits
 const emit = defineEmits(['update:modelValue', 'success']);
 
-const formRef = ref(null);
+const formRef = ref<FormInstance>();
 const loading = ref(false);
 
 // 表单默认数据结构
@@ -133,7 +134,7 @@ const handleSubmit = async () => {
       loading.value = true;
       try {
         // TODO: 在这里调用你的 API
-        if (isEdit.value) await updateUserAPI(formData);
+        if (isEdit.value) await updateUserAPI(formData as UpdateUserRequest);
         else await addUserAPI(formData);
         
         console.log('提交的数据:', JSON.parse(JSON.stringify(formData)));
