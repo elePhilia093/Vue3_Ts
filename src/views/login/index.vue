@@ -19,26 +19,50 @@
           <p>请输入您的账号信息以继续</p>
         </div>
 
-        <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large" class="modern-form"
-          @keyup.enter="handleLogin">
+        <el-form
+          ref="loginFormRef"
+          :model="loginForm"
+          :rules="loginRules"
+          size="large"
+          class="modern-form"
+          @keyup.enter="handleLogin"
+        >
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="邮箱 / 手机号" prefix-icon="User" clearable />
+            <el-input
+              v-model="loginForm.username"
+              placeholder="邮箱 / 手机号"
+              prefix-icon="User"
+              clearable
+            />
           </el-form-item>
 
           <el-form-item prop="password">
-            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" prefix-icon="Lock" show-password
-              clearable />
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              placeholder="请输入密码"
+              prefix-icon="Lock"
+              show-password
+              clearable
+            />
           </el-form-item>
           <div class="form-actions">
             <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
             <el-link type="primary" :underline="false">忘记密码？</el-link>
           </div>
 
-          <el-button type="primary" class="login-btn" :loading="loading" @click="handleLogin">
-            {{ loading ? '验证中...' : '登 录' }}
+          <el-button
+            type="primary"
+            class="login-btn"
+            :loading="loading"
+            @click="handleLogin"
+          >
+            {{ loading ? "验证中..." : "登 录" }}
           </el-button>
           <div class="form-footer">
-            还没有账号？<el-link type="primary" :underline="false">立即注册</el-link>
+            还没有账号？<el-link type="primary" :underline="false"
+              >立即注册</el-link
+            >
           </div>
         </el-form>
       </div>
@@ -47,10 +71,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { reactive, ref } from "vue";
+import { ElMessage, type FormInstance, type FormRules } from "element-plus";
+import { useRouter } from "vue-router";
+import { loginAPI } from "@/api/login";
+const router = useRouter();
 interface LoginFormState {
   username: string;
   password: string;
@@ -61,27 +86,35 @@ const loginFormRef = ref<FormInstance>();
 const loading = ref(false);
 
 const loginForm = reactive<LoginFormState>({
-  username: '',
-  password: '',
-  rememberMe: false
+  username: "",
+  password: "",
+  rememberMe: false,
 });
 
 const loginRules = reactive<FormRules<LoginFormState>>({
-  username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  username: [{ required: true, message: "请输入账号", trigger: "blur" }],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
-  ]
+    { required: true, message: "请输入密码", trigger: "blur" },
+    { min: 6, message: "密码长度不能少于6位", trigger: "blur" },
+  ],
 });
 
 const handleLogin = () => {
   if (!loginFormRef.value) return;
-  loginFormRef.value.validate((valid) => {
+  loginFormRef.value.validate(async (valid) => {
     if (valid) {
-      loading.value = true;
-      ElMessage.success('登录成功！');
-      loading.value = false;
-      router.push('/dashboard');
+      try {
+        loading.value = true;
+        const result = await loginAPI(loginForm);
+        console.log(result);
+        localStorage.setItem("token", result.token);
+        
+        ElMessage.success("登录成功！");
+        router.push('/dashboard');
+      } catch (error) {
+      } finally {
+        loading.value = false;
+      }
     }
   });
 };
@@ -94,7 +127,7 @@ const handleLogin = () => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', sans-serif;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", sans-serif;
 }
 
 /* 2. 左侧品牌区：动态渐变背景 */
@@ -192,7 +225,9 @@ const handleLogin = () => {
   letter-spacing: 2px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .login-btn:hover {

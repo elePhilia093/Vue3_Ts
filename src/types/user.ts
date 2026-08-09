@@ -26,5 +26,5 @@ export interface UpdateUserRequest {
   nickname: string;
   email: string;
   phone: string;
-  status: number;
+  status: number | string;
 }

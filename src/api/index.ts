@@ -1,6 +1,8 @@
 import axios from 'axios'
+import router from '@/router'
 import { ElMessage } from 'element-plus';
 import type {AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig} from 'axios'
+
 
 const service = axios.create({
   baseURL: '/api',
@@ -9,6 +11,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    config.headers['token'] = localStorage.getItem('token') || ''
 
     return config
   },
@@ -22,7 +25,6 @@ service.interceptors.response.use(
     if(response instanceof Blob){
       return response
     }
-    
     
     const res = response.data
     
@@ -38,7 +40,16 @@ service.interceptors.response.use(
     return res.data 
   },
   (error) => {
-    ElMessage.error(error.message)
+    if (error.response && error.response.status) {
+      const status = error.response.status
+      if (status === 401) {
+
+        ElMessage.error('登录过期，请重新登录')
+        // to re-login
+        router.push('/login')
+      }
+    }
+    
     return Promise.reject(error)
   }
 )

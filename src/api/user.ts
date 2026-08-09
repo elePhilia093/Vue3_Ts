@@ -36,3 +36,4 @@ export const deleteUserAPI = (id: number) => {
     method: 'delete',
   })
 }
+

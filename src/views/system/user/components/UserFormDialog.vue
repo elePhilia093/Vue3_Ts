@@ -81,7 +81,7 @@ const defaultForm = {
   nickname: '',
   phone: '',
   email: '',
-  status: 1
+  status: ''
 };
 
 // 使用 reactive 创建响应式表单数据
@@ -137,9 +137,6 @@ const handleSubmit = async () => {
         if (isEdit.value) await updateUserAPI(formData as UpdateUserRequest);
         else await addUserAPI(formData);
         
-        console.log('提交的数据:', JSON.parse(JSON.stringify(formData)));
-        
-        ElMessage.success(isEdit.value ? '修改成功' : '新增成功');
         visible.value = false; // 关闭弹窗
         emit('success');       // 通知父组件刷新列表
       } catch (error) {
