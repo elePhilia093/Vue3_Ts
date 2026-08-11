@@ -48,7 +48,7 @@
           </el-form-item>
           <div class="form-actions">
             <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
-            <el-link type="primary" :underline="false">忘记密码？</el-link>
+            <el-link type="primary" :underline="false" @click="router.push('/forgetpassword')">忘记密码？</el-link>
           </div>
 
           <el-button
@@ -60,7 +60,7 @@
             {{ loading ? "验证中..." : "登 录" }}
           </el-button>
           <div class="form-footer">
-            还没有账号？<el-link type="primary" :underline="false"
+            还没有账号？<el-link type="primary" :underline="false" @click="router.push('/register')"
               >立即注册</el-link
             >
           </div>

@@ -1,0 +1,77 @@
+/* common-auth.scss */
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%); // 根据你的截图提取的蓝紫渐变
+$text-main: #303133;
+$text-regular: #606266;
+$border-color: #dcdfe6;
+
+.auth-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+
+  /* 左侧品牌区域 */
+  .auth-banner {
+    flex: 1;
+    background: $primary-gradient;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+    
+    h1 { font-size: 48px; font-weight: bold; margin-bottom: 20px; }
+    p { font-size: 18px; opacity: 0.9; line-height: 1.6; }
+  }
+
+  /* 右侧表单区域 */
+  .auth-form-container {
+    width: 500px; // 保持与登录页一致的宽度
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+
+    .form-box {
+      width: 100%;
+      max-width: 360px;
+
+      .header { margin-bottom: 30px; }
+      .header h2 { font-size: 28px; color: $text-main; margin-bottom: 10px; }
+      .header p { color: $text-regular; font-size: 14px; }
+
+      /* 覆盖 Element Plus 默认样式以匹配截图 */
+      :deep(.el-input__wrapper) {
+        box-shadow: 0 0 0 1px $border-color inset;
+        padding: 8px 15px;
+        border-radius: 4px;
+        
+        &.is-focus { box-shadow: 0 0 0 1px #764ba2 inset !important; }
+      }
+
+      .btn-submit {
+        width: 100%;
+        background: $primary-gradient;
+        border: none;
+        padding: 20px 0;
+        font-size: 16px;
+        letter-spacing: 2px;
+        margin-top: 10px;
+        
+        &:hover { opacity: 0.9; }
+      }
+
+      .footer-links {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: $text-regular;
+        
+        a { color: #667eea; text-decoration: none; margin-left: 5px; cursor: pointer; }
+      }
+    }
+  }
+}
