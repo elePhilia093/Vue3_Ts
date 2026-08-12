@@ -46,7 +46,18 @@ service.interceptors.response.use(
 
         ElMessage.error('登录过期，请重新登录')
         // to re-login
-        router.push('/login')
+        const fullPath = router.currentRoute.value.fullPath
+        console.log(fullPath);
+        
+        localStorage.removeItem('token')
+        router.push({
+          path: '/login',
+          query: {
+            redirect: fullPath
+          }
+        })
+      } else if(status === 400){
+        ElMessage.error(error.response.data.message || '请求失败')
       }
     }
     

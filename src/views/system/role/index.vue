@@ -6,8 +6,8 @@
         <el-form-item label="角色名称">
           <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" clearable />
         </el-form-item>
-        <el-form-item label="角色编码">
-          <el-input v-model="queryParams.roleCode" placeholder="请输入角色编码" clearable />
+        <el-form-item label="角色代码">
+          <el-input v-model="queryParams.roleCode" placeholder="请输入角色代码" clearable />
         </el-form-item>
 
 
@@ -39,17 +39,17 @@
         <el-button type="primary" plain @click="handleAdd">
           <el-icon>
             <Plus />
-          </el-icon> 新增用户
+          </el-icon> 新增角色
         </el-button>
       </div>
 
       <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" height="100%">
         <!-- <el-table-column prop="id" label="ID" width="80" align="center" /> -->
-        <el-table-column prop="roleName" label="角色名称"  />
-        <el-table-column prop="roleCode" label="角色编码"  />
+        <el-table-column prop="roleName" label="角色名称" />
+        <el-table-column prop="roleCode" label="角色代码" />
 
 
-        <el-table-column prop="status" label="状态" >
+        <el-table-column prop="status" label="状态">
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
               {{ scope.row.status === 1 ? "正常" : "停用" }}
@@ -81,15 +81,19 @@
     </el-card>
 
     <!-- 引用封装好的弹窗组件 -->
-    <!-- <UserFormDialog v-model="dialogVisible" :user-data="currentRow" @success="getList" /> -->
+     <RoleDialog 
+      v-model="dialogVisible" 
+      :row-data="currentRow" 
+      @success="getList" 
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchRoleList} from "@/api/role";
+import RoleDialog from './components/RoleDialog.vue'
+import { fetchRoleList, deleteRole } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
-// import UserFormDialog from './components/UserFormDialog.vue';
 import type { User } from '@/types/user'
 
 // --- 模拟数据与逻辑 ---
@@ -115,7 +119,7 @@ const getList = async () => {
     tableData.value = res.records;
     total.value = res.total;
   } catch (error) {
-    console.error("获取角色列表失败:", error);
+    
   } finally {
     loading.value = false;
   }
@@ -133,9 +137,7 @@ const handleCurrentChange = (val: number) => {
 };
 
 const handleSearch = () => {
-  console.log("执行查询:", queryParams);
   getList();
-  // TODO: 调用后端接口 this.list(new QueryWrapper<User>().like("username", ...))
 };
 
 const resetQuery = () => {
@@ -164,10 +166,10 @@ const handleEdit = (row: any) => {
 // 删除用户
 const handleDelete = async (row: any) => {
   try {
-    // await deleteUserAPI(row.id);
+    await deleteRole(row.id);
     getList();
   } catch (error) {
-    ElMessage.error('删除失败');
+    
   }
 };
 

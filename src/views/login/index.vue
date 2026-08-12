@@ -73,9 +73,11 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { loginAPI } from "@/api/login";
 const router = useRouter();
+const route = useRoute();
+const {query} = route;
 interface LoginFormState {
   username: string;
   password: string;
@@ -108,9 +110,12 @@ const handleLogin = () => {
         const result = await loginAPI(loginForm);
         console.log(result);
         localStorage.setItem("token", result.token);
-        
+        if (query.redirect) {
+          router.push(query.redirect as string);
+        }else{
+          router.push('/dashboard');
+        }
         ElMessage.success("登录成功！");
-        router.push('/dashboard');
       } catch (error) {
       } finally {
         loading.value = false;
