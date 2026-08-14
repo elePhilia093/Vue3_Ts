@@ -68,15 +68,17 @@
 
         <el-table-column prop="createTime" label="创建时间" width="160" align="center" />
 
-        <el-table-column label="操作" width="150" align="center" fixed="right">
+        <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link type="info" size="small" @click="handleAssignRole(scope.row)">分配角色</el-button>
             <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
 
               <template #reference>
                 <el-button link type="danger" size="small">删除</el-button>
               </template>
             </el-popconfirm>
+
           </template>
         </el-table-column>
       </el-table>
@@ -91,6 +93,9 @@
 
     <!-- 引用封装好的弹窗组件 -->
     <UserFormDialog v-model="dialogVisible" :user-data="currentRow" @success="getList" />
+
+    <!-- 分配角色弹窗 -->
+    <AssignRoleDialog v-model:visible="roleDialogVisible" :user-info="currentUser" @success="handleRoleSuccess" />
   </div>
 </template>
 
@@ -99,6 +104,7 @@ import { fetchUserListAPI, deleteUserAPI } from "@/api/user";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import UserFormDialog from './components/UserFormDialog.vue';
+import AssignRoleDialog from './components/AssignRoleDialog.vue';
 import type { User } from '@/types/user'
 
 // --- 模拟数据与逻辑 ---
@@ -178,6 +184,25 @@ const handleDelete = async (row: any) => {
   } catch (error) {
     ElMessage.error('删除失败');
   }
+};
+
+// 分配角色
+const handleAssignRole = (row: any) => {
+  console.log('分配角色:', row);
+  currentUser.value = row;
+  roleDialogVisible.value = true;
+}
+
+// 控制弹窗显隐
+const roleDialogVisible = ref(false);
+
+// 当前选中要分配角色的用户
+const currentUser = ref<any>(null);
+
+
+// 分配角色成功后的回调
+const handleRoleSuccess = () => {
+  getList();
 };
 
 onMounted(() => {

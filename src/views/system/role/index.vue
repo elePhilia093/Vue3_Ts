@@ -62,6 +62,7 @@
         <el-table-column label="操作" fixed="right">
           <template #default="scope">
             <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link type="info" size="small" @click="handleAssignMenu(scope.row)">分配菜单</el-button>
             <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
 
               <template #reference>
@@ -86,11 +87,19 @@
       :row-data="currentRow" 
       @success="getList" 
     />
+
+     <MenuDialog 
+       v-model:visible="menuDialogVisible" 
+      :role-info="currentRow" 
+      @success="handleMenuSuccess" 
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import RoleDialog from './components/RoleDialog.vue'
+import MenuDialog from './components/MenuDialog.vue'
+
 import { fetchRoleList, deleteRole } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
@@ -151,6 +160,9 @@ const resetQuery = () => {
 const dialogVisible = ref(false);
 const currentRow = ref(null); // 用于存储当前正在编辑的行数据
 
+const menuDialogVisible = ref(false);
+
+
 // 新增用户
 const handleAdd = () => {
   currentRow.value = null;
@@ -172,6 +184,19 @@ const handleDelete = async (row: any) => {
     
   }
 };
+
+// 分配菜单
+const handleAssignMenu = (row: any) => {
+  currentRow.value = row;
+  menuDialogVisible.value = true;
+};
+
+// 分配菜单成功后的回调
+const handleMenuSuccess = () => {
+  getList();
+};
+
+
 
 onMounted(() => {
   getList();

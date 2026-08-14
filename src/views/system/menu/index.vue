@@ -40,7 +40,7 @@
     <!-- 2. 数据表格区 -->
     <el-card class="table-card" shadow="never">
       <div class="table-header">
-        <el-button type="primary" plain @click="handleAdd()">
+        <el-button type="primary" plain @click="handleAdd(null)">
           <el-icon><Plus /></el-icon> 新增菜单
         </el-button>
       </div>
@@ -125,7 +125,7 @@ const dialogVisible = ref(false);
 const dialogTitle = ref('');
 
 
-const currentFormData = ref(null);
+const currentFormData = ref({});
 const getList = async () => {
   loading.value = true;
   try {
@@ -158,7 +158,7 @@ const resetQuery = () => {
 const handleAdd = (row) => {
   
   dialogTitle.value = row ? `新增[${row.menuName}]子项` : '新增菜单';
-  currentFormData.value = null; // 重置表单
+  currentFormData.value = {}; // 重置表单
   
   if (row) {
     // 如果是点击某行的“新增子项”，自动填充 parentId

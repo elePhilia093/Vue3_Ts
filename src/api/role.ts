@@ -11,6 +11,13 @@ export const fetchRoleList = (data: {}) => {
   })
 }
 
+export const fetchRoleListAll = () => {
+  return request({
+    url: roleApi + '/list',
+    method: 'get',
+  })
+}
+
 export const addRole = (data: {}) => {
   return request({
     url: roleApi + '/add',

@@ -37,3 +37,18 @@ export const deleteUserAPI = (id: number) => {
   })
 }
 
+export const assignRolesAPI = (data: { userId: number, roleIds: number[] }) => {
+  return request({
+    url: '/sysUserRole/assign',
+    method: 'post',
+    data,
+  })
+}
+
+export const getRolesByUserIdAPI = ( params: { userId: number }) => {
+  return request({
+    url: `/sysUserRole/list`,
+    method: 'get',
+    params,
+  })
+}
