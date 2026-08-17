@@ -13,6 +13,7 @@
 
         <el-form-item label="状态">
           <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 150px">
+            <el-option label="全部" value="" />
             <el-option label="启用" :value="1" />
             <el-option label="禁用" :value="0" />
           </el-select>

@@ -23,7 +23,7 @@ export const addMenuAPI = (data: {}) => {
 export const updateMenuAPI = (data: {}) => {
   return request({
     url: menuApi + '/update',
-    method: 'put',
+    method: 'POST',
     data
   })
 }

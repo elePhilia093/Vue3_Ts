@@ -1,34 +1,14 @@
 <template>
-  <el-dialog
-    :title="isEdit ? '编辑角色' : '新增角色'"
-    v-model="visible"
-    width="500px"
-    @close="handleClose"
-    destroy-on-close
-  >
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      label-width="80px"
-    >
+  <el-dialog :title="isEdit ? '编辑角色' : '新增角色'" v-model="visible" width="500px" @close="handleClose" destroy-on-close>
+    <el-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
       <!-- 角色名称 -->
       <el-form-item label="角色名称" prop="roleName">
-        <el-input
-          v-model="formData.roleName"
-          placeholder="请输入角色名称"
-          clearable
-        />
+        <el-input v-model="formData.roleName" placeholder="请输入角色名称" clearable />
       </el-form-item>
 
       <!-- 角色编码 -->
       <el-form-item label="角色编码" prop="roleCode">
-        <el-input
-          v-model="formData.roleCode"
-          placeholder="请输入唯一标识(如: admin)"
-          clearable
-          :disabled="isEdit" 
-        />
+        <el-input v-model="formData.roleCode" placeholder="请输入唯一标识(如: admin)" clearable :disabled="isEdit" />
       </el-form-item>
 
       <!-- 状态 -->
@@ -139,23 +119,19 @@ const handleClose = () => {
 // 提交表单
 const handleSubmit = async () => {
   if (!formRef.value) return;
+  if (loading.value) return;
 
-  await formRef.value.validate(async (valid) => {
-    if (valid) {
-      loading.value = true;
-      try {
-        // TODO: 这里调用你的 API
-        const apiFunc = isEdit.value ? updateRole : addRole;
-        const res = await apiFunc(formData);
-        
-        visible.value = false;
-        emit('success'); // 通知父组件刷新列表
-      } catch (error) {
-        // 错误通常在全局拦截器处理，这里可以处理特定逻辑
-      } finally {
-        loading.value = false;
-      }
-    }
-  });
+
+  try {
+    await formRef.value.validate();
+    loading.value = true;
+
+    const apiFunc = isEdit.value ? updateRole : addRole;
+    const res = await apiFunc(formData);
+    visible.value = false;
+    emit('success'); // 通知父组件刷新列表
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
