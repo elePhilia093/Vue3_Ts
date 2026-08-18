@@ -48,7 +48,7 @@
           </el-form-item>
           <div class="form-actions">
             <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
-            <el-link type="primary" :underline="false" @click="router.push('/forgetpassword')">忘记密码？</el-link>
+            <el-link type="primary" underline="hover" @click="router.push('/forgetpassword')">忘记密码？</el-link>
           </div>
 
           <el-button
@@ -74,7 +74,10 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
-import { loginAPI } from "@/api/login";
+import { loginAPI, userInfoAPI } from "@/api/login";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+
 const router = useRouter();
 const route = useRoute();
 const {query} = route;
@@ -110,6 +113,8 @@ const handleLogin = () => {
         const result = await loginAPI(loginForm);
         console.log(result);
         localStorage.setItem("token", result.token);
+        userStore.token = result.token;
+        await handleUserInfo();
         if (query.redirect) {
           router.push(query.redirect as string);
         }else{
@@ -123,6 +128,16 @@ const handleLogin = () => {
     }
   });
 };
+
+const handleUserInfo = async () => {
+  try {
+    const result = await userInfoAPI();
+    console.log(result);
+    userStore.userInfo = result;
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+  }
+}
 </script>
 
 <style scoped>

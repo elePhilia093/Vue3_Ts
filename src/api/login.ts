@@ -8,3 +8,11 @@ export const loginAPI = (data: {}) => {
     data,
   })
 }
+
+// userInfo
+export const userInfoAPI = () => {
+  return request({
+    url: '/auth/userInfo',
+    method: 'get',
+  })
+}

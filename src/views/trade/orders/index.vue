@@ -2,9 +2,18 @@
   <div>
     目前测试页面
 
-    <el-button type="primary" @click="testClick">点击测试</el-button>
-    <br>
-    <el-button type="primary" @click="testClick2">点击测试2</el-button>
+
+    <div style="margin-bottom: 10px;">
+      <el-button type="primary" @click="testClick">点击测试</el-button>
+    </div>
+    
+    <div style="margin-bottom: 10px;">
+      <el-button type="primary" @click="testClick2">点击测试2</el-button>
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <el-button type="primary" @click="testClick3">点击测试3</el-button>
+    </div>
   </div>
 </template>
 
@@ -33,6 +42,16 @@ const testClick2 = () => {
       "roleId": 1,
       "menuIds": [1, 2, 3, 4, 5, 6]
     }
+  }).then(res => {
+    console.log(res);
+  })
+}
+
+const testClick3 = () => {
+  request({
+    url: '/auth/userInfo',
+    method: 'get',
+
   }).then(res => {
     console.log(res);
   })

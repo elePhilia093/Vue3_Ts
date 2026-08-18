@@ -21,6 +21,11 @@
         />
       </el-form-item>
 
+      <!-- 密码 -->
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="formData.password" placeholder="请输入密码" type="text" />
+      </el-form-item>
+
       <!-- 昵称 -->
       <el-form-item label="昵称" prop="nickname">
         <el-input v-model="formData.nickname" placeholder="请输入昵称" />
@@ -81,6 +86,7 @@ const defaultForm = {
   nickname: '',
   phone: '',
   email: '',
+  password: '',
   status: ''
 };
 
@@ -115,6 +121,7 @@ watch(() => props.userData, (newVal) => {
 const rules = {
   username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
   phone: [
     { required: true, message: '请输入手机号', trigger: 'blur' },
     { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }

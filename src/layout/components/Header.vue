@@ -19,7 +19,7 @@
         />
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            欢迎您：{{ '管理员' }}
+            欢迎您：{{userStore.userInfo.username || '用户' }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>
@@ -38,6 +38,8 @@
 <script setup lang="ts">
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 const router = useRouter();
 const handleCommand = (command: string) => {
   console.log(command);
