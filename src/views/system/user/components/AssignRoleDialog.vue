@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="角色列表">
         <el-checkbox-group v-model="selectedRoleIds">
-          <el-checkbox v-for="role in allRoles" :key="role.id" :label="role.id">
+          <el-checkbox v-for="role in allRoles" :key="role.id" :value="role.id">
             {{ role.roleName }}
           </el-checkbox>
         </el-checkbox-group>
