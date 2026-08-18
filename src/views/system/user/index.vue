@@ -116,7 +116,7 @@ const total = ref(0);
 const queryParams = reactive({
   username: "",
   phone: "",
-  status: 1,
+  status: '',
   pageSize: 4,
   pageNum: 1,
 });

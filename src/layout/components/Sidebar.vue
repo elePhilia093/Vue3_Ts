@@ -10,36 +10,46 @@
           <span>Dashboard</span>
         </el-menu-item>
 
-        <el-sub-menu index="/trade">
-          <template #title>
-            <el-icon>
-              <Message />
-            </el-icon>交易管理
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="/trade/customers">客户信息</el-menu-item>
-            <el-menu-item index="/trade/orders">订单信息</el-menu-item>
-          </el-menu-item-group>
+        <template v-for="menu in menus" :key="menu.path">
 
-        </el-sub-menu>
-        <el-sub-menu index="/system">
-          <template #title>
+          <!-- 1. 没有子菜单：渲染为普通菜单项 -->
+          <el-menu-item v-if="!menu.children || menu.children.length === 0" :index="menu.path">
             <el-icon>
               <Menu />
-            </el-icon>系统管理
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="/system/user">用户管理</el-menu-item>
-            <el-menu-item index="/system/role">角色管理</el-menu-item>
-            <el-menu-item index="/system/menu">菜单管理</el-menu-item>
-          </el-menu-item-group>
-        </el-sub-menu>
+            </el-icon>
+            <span>{{ menu.menuName }}</span>
+          </el-menu-item>
+
+          <!-- 2. 有子菜单：渲染为折叠菜单 -->
+          <el-sub-menu v-else :index="menu.path">
+            <template #title>
+              <el-icon>
+                <Menu />
+              </el-icon>
+              <span>{{ menu.menuName }}</span>
+            </template>
+
+            <!-- 渲染子菜单项 -->
+            <el-menu-item v-for="child in menu.children" :key="child.path" :index="child.path">
+              {{ child.menuName }}
+            </el-menu-item>
+          </el-sub-menu>
+
+        </template>
+
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+
+const userStore = useUserStore()
+
+const { menus } = storeToRefs(userStore);
+
 
 </script>
 

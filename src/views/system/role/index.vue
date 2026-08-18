@@ -107,6 +107,9 @@ import { fetchRoleList, deleteRole } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import type { User } from '@/types/user'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
 
 // --- 模拟数据与逻辑 ---
 const loading = ref(false);
@@ -116,7 +119,7 @@ const total = ref(0);
 const queryParams = reactive({
   roleName: "",
   roleCode: "",
-  status: 1,
+  status: '',
   pageSize: 4,
   pageNum: 1,
 });
@@ -195,7 +198,8 @@ const handleAssignMenu = (row: any) => {
 };
 
 // 分配菜单成功后的回调
-const handleMenuSuccess = () => {
+const handleMenuSuccess = async () => {
+  await userStore.handleUserInfo();
   getList();
 };
 

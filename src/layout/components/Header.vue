@@ -45,7 +45,7 @@ const handleCommand = (command: string) => {
   console.log(command);
   if (command === "logout") {
     // 执行退出登录操作
-    localStorage.removeItem("token");
+    localStorage.clear()
     router.push("/login");
   }
 };

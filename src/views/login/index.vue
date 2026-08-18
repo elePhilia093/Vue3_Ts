@@ -60,7 +60,7 @@
             {{ loading ? "验证中..." : "登 录" }}
           </el-button>
           <div class="form-footer">
-            还没有账号？<el-link type="primary" :underline="false" @click="router.push('/register')"
+            还没有账号？<el-link type="primary" underline="hover" @click="router.push('/register')"
               >立即注册</el-link
             >
           </div>
@@ -111,10 +111,9 @@ const handleLogin = () => {
       try {
         loading.value = true;
         const result = await loginAPI(loginForm);
-        console.log(result);
         localStorage.setItem("token", result.token);
         userStore.token = result.token;
-        await handleUserInfo();
+        await userStore.handleUserInfo();
         if (query.redirect) {
           router.push(query.redirect as string);
         }else{
@@ -129,15 +128,14 @@ const handleLogin = () => {
   });
 };
 
-const handleUserInfo = async () => {
-  try {
-    const result = await userInfoAPI();
-    console.log(result);
-    userStore.userInfo = result;
-  } catch (error) {
-    console.error("获取用户信息失败:", error);
-  }
-}
+// const handleUserInfo = async () => {
+//   try {
+//     const result = await userInfoAPI();
+//     userStore.userInfo = result;
+//   } catch (error) {
+//     console.error("获取用户信息失败:", error);
+//   }
+// }
 </script>
 
 <style scoped>

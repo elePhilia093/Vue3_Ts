@@ -150,6 +150,8 @@ const submitForm = () => {
 
       // 特殊处理：如果是顶级目录，parentId 设为 0
       if (!submitData.parentId) submitData.parentId = 0;
+      // 更新菜单列表
+      
 
       emit('submit', submitData);
       visible.value = false;
