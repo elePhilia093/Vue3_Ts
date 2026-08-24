@@ -3,9 +3,8 @@
     <!-- 左侧：面包屑导航 -->
     <div class="header-left">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>交易管理</el-breadcrumb-item>
-        <el-breadcrumb-item>订单信息</el-breadcrumb-item>
+        <!-- 根据路由动态添加面包屑项 -->
+        <el-breadcrumb-item v-for="item in breadcrumbItems" :key="item.path" :to="item.path">{{ item.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -39,8 +38,36 @@
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user";
+import { ref, onMounted, watch } from "vue";
 const userStore = useUserStore();
 const router = useRouter();
+
+interface BreadcrumbItem {
+  name: string;   // 对应 item.meta.title
+  path: string;   // 对应 item.path || item.name
+}
+const breadcrumbItems = ref<BreadcrumbItem[]>([]);
+
+onMounted(() => {
+  // 初始化面包屑导航
+  updateBreadcrumbItems();
+});
+
+const updateBreadcrumbItems = () => {
+  breadcrumbItems.value = [];
+  let currentRoute = router.currentRoute.value;
+
+  currentRoute.matched.forEach((item) => {
+    breadcrumbItems.value.push({
+      name: item.meta.title as string,
+      path: item.path || item.name as string
+    });
+  });
+};
+
+watch(() => router.currentRoute.value, updateBreadcrumbItems);
+
+
 const handleCommand = (command: string) => {
   console.log(command);
   if (command === "logout") {

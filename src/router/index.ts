@@ -6,6 +6,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'layout',
+      meta: { title: '首页' },
       component: () => import('@/layout/index.vue'),
       redirect: '/dashboard',
       children: [
@@ -62,6 +63,12 @@ const router = createRouter({
               name: 'MenuManage',
               meta: { title: '菜单管理' },
               component: () => import('@/views/system/menu/index.vue'),
+            },
+            {
+              path: 'dept',
+              name: 'DepManage',
+              meta: { title: '部门管理' },
+              component: () => import('@/views/system/dept/index.vue'),
             }
           ],
         },

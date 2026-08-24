@@ -54,8 +54,8 @@ const key = computed(() => route.path);
 
 /* --- 自定义滚动条样式 (Webkit内核浏览器) --- */
 .app-main::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
 }
 
 .app-main::-webkit-scrollbar-thumb {

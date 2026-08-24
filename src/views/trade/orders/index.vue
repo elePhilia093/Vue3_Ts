@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="orders-container">
     目前测试页面
 
 
@@ -58,4 +58,13 @@ const testClick3 = () => {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.orders-container{
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+</style>

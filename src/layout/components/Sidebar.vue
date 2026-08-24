@@ -1,7 +1,7 @@
 <template>
   <div class="layout-sidebar">
     <el-scrollbar>
-      <el-menu router :default-active="$route.path" class="custom-menu" background-color="transparent"
+      <el-menu unique-opened router :default-active="$route.path" class="custom-menu" background-color="transparent"
         text-color="#e0e6ed" active-text-color="#ffffff" :collapse="false">
         <el-menu-item index="/dashboard">
           <el-icon>

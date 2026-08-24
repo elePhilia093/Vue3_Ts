@@ -110,6 +110,9 @@ import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { fetchMenuListAPI, deleteMenuAPI, addMenuAPI, updateMenuAPI } from "@/api/menu"; // 引入你的API
 import MenuDialog from "./components/MenuDialog.vue";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+
 
 // 1. 查询参数 (对应 DTO 中的查询字段)
 const queryParams = reactive({
@@ -188,6 +191,7 @@ const handleSubmit = async (data) => {
     } else {
       await addMenuAPI(data);
     }
+    await userStore.handleUserInfo();
     getList();
   } catch (error) {
     console.error(error);
