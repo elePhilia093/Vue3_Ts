@@ -3,26 +3,25 @@
     <!-- 1. 顶部查询区 -->
     <el-card class="search-card" shadow="never">
       <el-form :inline="true" :model="queryParams" class="search-form">
-        <el-form-item label="菜单名称">
+        <el-form-item label="部门名称">
           <el-input 
-            v-model="queryParams.menuName" 
-            placeholder="请输入菜单名称" 
+            v-model.trim="queryParams.deptName" 
+            placeholder="请输入部门名称" 
             clearable 
             style="width: 200px"
           />
         </el-form-item>
 
-        <el-form-item label="菜单类型">
+        <el-form-item label="状态">
           <el-select 
-            v-model="queryParams.menuType" 
-            placeholder="请选择类型" 
+            v-model="queryParams.status" 
+            placeholder="请选择状态" 
             clearable 
             style="width: 150px"
           >
             <!-- 这里的 value 需根据你的业务枚举调整，DTO中是String -->
-            <el-option label="目录" :value="1" />
-            <el-option label="菜单" :value="2" />
-            <el-option label="按钮" :value="3" />
+            <el-option label="正常" :value="1" />
+            <el-option label="禁用" :value="0" />
           </el-select>
         </el-form-item>
 
@@ -44,23 +43,17 @@
         :data="tableData" 
         border 
         stripe 
-        style="width: 100%"
+        style="width: 100%" 
+        row-key="id"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-        <el-table-column prop="menuName" label="菜单名称" min-width="180" show-overflow-tooltip />
-        <el-table-column prop="permission" label="权限标识" min-width="160" show-overflow-tooltip />
-        <el-table-column label="操作" width="180" align="center" fixed="right">
-          <template #default="scope">
-            <el-button link type="success" size="small" @click="handleAdd(scope.row)" >
-              新增
-            </el-button>
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确认删除该菜单吗？" @confirm="handleDelete(scope.row)">
-              <template #reference>
-                <el-button link type="danger" size="small">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
+        <el-table-column prop="deptName" label="部门名称" min-width="180" show-overflow-tooltip />
+      
+        <el-table-column prop="status" label="状态" min-width="160" show-overflow-tooltip />
+
+        <el-table-column prop="createTime" label="创建时间" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="updateTime" label="更新时间" min-width="150" show-overflow-tooltip />
+
       </el-table>
     </el-card>
   </div>
@@ -69,11 +62,12 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
+import { getDeptListAPI } from "@/api/dept";
 
-
+// 
 const queryParams = reactive({
-  menuName: "",
-  menuType: undefined as number | undefined,
+  deptName: "",
+  status: undefined as number | undefined,
 });
 
 const loading = ref(false);
@@ -81,13 +75,21 @@ const tableData = ref([]);
 
 
 
+
+
+const getList = async () => {
+  const res = await getDeptListAPI(queryParams);
+  tableData.value = res || [];
+}
+
 const handleSearch = () => {
-  
+  getList();
 };
 
 const resetQuery = () => {
-  queryParams.menuName = "";
-  queryParams.menuType = undefined;
+  queryParams.deptName = "";
+  queryParams.status = undefined;
+  getList();
 };
 
 const handleAdd = (row) => {

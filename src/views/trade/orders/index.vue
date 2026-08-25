@@ -48,10 +48,20 @@ const testClick2 = () => {
 }
 
 const testClick3 = () => {
-  request({
-    url: '/auth/userInfo',
-    method: 'get',
+  // request({
+  //   url: '/auth/userInfo',
+  //   method: 'get',
 
+  // }).then(res => {
+  //   console.log(res);
+  // })
+  request({
+    url: '/sys/dept/list',
+    method: 'get',
+    params: {
+      "deptName": "",
+      "status": 1
+    }
   }).then(res => {
     console.log(res);
   })
