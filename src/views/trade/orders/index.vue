@@ -6,7 +6,7 @@
     <div style="margin-bottom: 10px;">
       <el-button type="primary" @click="testClick">点击测试</el-button>
     </div>
-    
+
     <div style="margin-bottom: 10px;">
       <el-button type="primary" @click="testClick2">点击测试2</el-button>
     </div>
@@ -55,21 +55,32 @@ const testClick3 = () => {
   // }).then(res => {
   //   console.log(res);
   // })
+  // request({
+  //   url: '/sys/dept/list',
+  //   method: 'get',
+  //   params: {
+  //     "deptName": "",
+  //     "status": 1
+  //   }
+  // }).then(res => {
+  //   console.log(res);
+  // })
+
   request({
-    url: '/sys/dept/list',
-    method: 'get',
-    params: {
-      "deptName": "",
+    url: '/sys/dept/add',
+    method: 'post',
+    data: {
+      "parentId": 2,
+      "deptName": "Java组",
+      "sort": 3,
       "status": 1
     }
-  }).then(res => {
-    console.log(res);
   })
 }
 </script>
 
 <style lang="scss" scoped>
-.orders-container{
+.orders-container {
   width: 100%;
   height: 100%;
   padding: 20px;
