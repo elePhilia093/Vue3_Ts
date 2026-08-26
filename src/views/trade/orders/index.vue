@@ -14,11 +14,20 @@
     <div style="margin-bottom: 10px;">
       <el-button type="primary" @click="testClick3">点击测试3</el-button>
     </div>
+
+    <div style="margin-bottom: 10px;">
+
+     测试上传：
+      <input type="file" @change="handleFileChange" />
+      <!-- <img v-if="isImage" :src="fileUrl" alt="预览" class="preview" /> -->
+     <el-button type="primary" @click="testClick4">点击测试4</el-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import request from '@/api/index'
+import { ref } from 'vue'
 
 const testClick = () => {
   console.log('点击了测试按钮');
@@ -75,6 +84,31 @@ const testClick3 = () => {
       "sort": 3,
       "status": 1
     }
+  })
+}
+
+const file = ref(null);
+const isImage = ref(false);
+const fileUrl = ref(null);  
+
+const handleFileChange = (e) => {
+  file.value = e.target.files[0];
+
+}
+
+
+const testClick4 = () => {
+  request({
+    url: '/file/upload',
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: {
+      "file": file.value
+    }
+  }).then(res => {
+    console.log(res);
   })
 }
 </script>
