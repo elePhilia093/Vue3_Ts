@@ -28,8 +28,7 @@ export const updateDeptAPI = (data: any) => {
 
 export const deleteDeptAPI = (id: number) => {
   return request({
-    url: "/sys/dept/delete",
+    url: "/sys/dept/delete/" + id,
     method: "post",
-    data: { id },
   });
 }

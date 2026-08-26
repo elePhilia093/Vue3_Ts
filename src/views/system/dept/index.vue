@@ -120,9 +120,14 @@ const handleEdit = (row) => {
   dialogVisible.value = true;
 }
 
-const handleDelete = async (row) => { 
-  await deleteDeptAPI(row.id);
-  getList();
+const handleDelete = async (row) => {
+  try {
+    await deleteDeptAPI(row.id);
+    getList();
+  } catch (error) {
+    
+  }
+  
 }
 
 const handleSubmit = (formData) => {
