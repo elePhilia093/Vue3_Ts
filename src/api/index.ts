@@ -22,7 +22,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    if(response instanceof Blob){
+    if(response.config.responseType === 'blob'){
       return response
     }
     
@@ -33,8 +33,8 @@ service.interceptors.response.use(
       return Promise.reject(res)
     }
 
-    if(res.code == 200 && res.message && !res.data){
-      ElMessage.success(res.message)
+    if(res.code == 200 && res.message){
+      
     }
     
     return res.data 

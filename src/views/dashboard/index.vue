@@ -1,147 +1,276 @@
 <template>
-  <div class="order-page-container">
-    <!-- 核心容器：单一大卡片设计 -->
-    <el-card shadow="never" class="main-card">
-      
-      <!-- 1. 顶部区域：整合搜索与功能按钮 -->
-      <div class="card-header-toolbar">
-        <!-- 左侧：搜索表单 -->
-        <el-form :inline="true" :model="queryParams" class="search-form">
-          <el-form-item label="Approved by">
-            <el-input 
-              v-model="queryParams.keyword" 
-              placeholder="请输入关键词..." 
-              clearable 
-              prefix-icon="Search"
-              style="width: 220px;"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">查询</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <!-- 右侧：操作按钮组 -->
-        <div class="action-buttons">
-          <el-button type="primary" plain icon="Plus">添加新订单</el-button>
+  <div class="dashboard">
+    <!-- 顶部数据卡片 -->
+    <div class="card-row">
+      <div class="data-card" v-for="item in statCards" :key="item.title">
+        <div class="card-title">{{ item.title }}</div>
+        <div class="card-value">{{ item.value }}</div>
+        <div class="card-trend" :class="item.trend > 0 ? 'up' : 'down'">
+          {{ item.trend > 0 ? '↑' : '↓' }} {{ Math.abs(item.trend) }}%
         </div>
       </div>
+    </div>
 
-      <!-- 2. 中间区域：数据表格 (自动填满剩余高度) -->
-      <div class="table-wrapper">
-        <el-table 
-          :data="tableData" 
-          style="width: 100%" 
-          height="400px"
-          border
-          stripe
-        >
-          <el-table-column prop="name" label="姓名" width="120" />
-          <el-table-column prop="email" label="邮箱" min-width="200" show-overflow-tooltip />
-          <el-table-column prop="createTime" label="创建时间" width="180" sortable />
-          <el-table-column label="操作" width="180" fixed="right">
-            <template #default="scope">
-              <el-button link type="primary" size="small" icon="Edit">编辑</el-button>
-              <el-popconfirm title="确定删除吗？">
-                <template #reference>
-                  <el-button link type="danger" size="small" icon="Delete">删除</el-button>
-                </template>
-              </el-popconfirm>
-            </template>
-          </el-table-column>
-        </el-table>
+    <!-- 图表区域 -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>用户增长趋势</h3>
+        <v-chart :option="lineOption" autoresize />
       </div>
-
-      <!-- 3. 底部区域：分页器 -->
-      <div class="pagination-container">
-        <el-pagination
-          background
-          layout="total, prev, pager, next, jumper"
-          :total="100"
-        />
+      <div class="chart-box">
+        <h3>各渠道访问量</h3>
+        <v-chart :option="barOption" autoresize />
       </div>
+    </div>
 
-    </el-card>
+    <div class="chart-row">
+      <div class="chart-box half">
+        <h3>订单状态分布</h3>
+        <v-chart :option="pieOption" autoresize />
+      </div>
+      <div class="chart-box half">
+        <h3>近7天销售额</h3>
+        <v-chart :option="areaOption" autoresize />
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup>
-import { reactive, ref } from 'vue';
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import VChart from 'vue-echarts'
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { LineChart, BarChart, PieChart } from 'echarts/charts'
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+} from 'echarts/components'
 
-// 模拟数据
-const queryParams = reactive({ keyword: '' });
-const tableData = [
-  { name: '二顺', email: '131@1312.com', createTime: '2026-07-29 17:54:53' },
-  { name: '小马2', email: '1231@163.com', createTime: '2026-07-29 17:15:50' },
-  { name: '小牛', email: '898989123@qq.com', createTime: '2026-07-29 16:37:25' },
-  { name: '小美', email: '23231312@qq.com', createTime: '2026-07-29 16:32:46' },
-  { name: '小马2', email: '1231@163.com', createTime: '2026-07-29 17:15:50' },
-  { name: '小牛', email: '898989123@qq.com', createTime: '2026-07-29 16:37:25' },
-  { name: '小美', email: '23231312@qq.com', createTime: '2026-07-29 16:32:46' },
-  { name: '小马2', email: '1231@163.com', createTime: '2026-07-29 17:15:50' },
-  { name: '小牛', email: '898989123@qq.com', createTime: '2026-07-29 16:37:25' },
-  { name: '小美', email: '23231312@qq.com', createTime: '2026-07-29 16:32:46' },
-  // ...更多数据用于测试滚动
-];
+// 按需注册 ECharts 组件
+use([
+  CanvasRenderer,
+  LineChart,
+  BarChart,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent
+])
 
-const handleQuery = () => console.log('查询', queryParams);
-const resetQuery = () => queryParams.keyword = '';
+// ========== 数据卡片 ==========
+interface StatCard {
+  title: string
+  value: string
+  trend: number
+}
+
+const statCards = ref<StatCard[]>([
+  { title: '总用户数', value: '12,846', trend: 12.5 },
+  { title: '今日订单', value: '1,024', trend: 8.3 },
+  { title: '今日销售额', value: '¥86,420', trend: -2.1 },
+  { title: '转化率', value: '3.6%', trend: 5.7 }
+])
+
+// ========== 折线图：用户增长趋势 ==========
+const lineOption = reactive({
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['新增用户', '活跃用户'] },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月']
+  },
+  yAxis: { type: 'value' },
+  series: [
+    {
+      name: '新增用户',
+      type: 'line',
+      smooth: true,
+      data: [820, 932, 901, 1234, 1290, 1330, 1520],
+      itemStyle: { color: '#409EFF' }
+    },
+    {
+      name: '活跃用户',
+      type: 'line',
+      smooth: true,
+      data: [620, 732, 801, 934, 1090, 1130, 1220],
+      itemStyle: { color: '#67C23A' }
+    }
+  ]
+})
+
+// ========== 柱状图：各渠道访问量 ==========
+const barOption = reactive({
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['搜索引擎', '直接访问', '社交媒体', '邮件推广', '广告投放']
+  },
+  yAxis: { type: 'value' },
+  series: [
+    {
+      type: 'bar',
+      data: [4200, 3100, 2800, 1500, 2200],
+      itemStyle: {
+        color: {
+          type: 'linear',
+          x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [
+            { offset: 0, color: '#409EFF' },
+            { offset: 1, color: '#79bbff' }
+          ]
+        },
+        borderRadius: [4, 4, 0, 0]
+      }
+    }
+  ]
+})
+
+// ========== 饼图：订单状态分布 ==========
+const pieOption = reactive({
+  tooltip: { trigger: 'item' },
+  legend: { bottom: '0%' },
+  series: [
+    {
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
+      label: { show: false },
+      emphasis: {
+        label: { show: true, fontSize: 16, fontWeight: 'bold' }
+      },
+      data: [
+        { value: 1048, name: '已完成', itemStyle: { color: '#67C23A' } },
+        { value: 735, name: '处理中', itemStyle: { color: '#E6A23C' } },
+        { value: 580, name: '待支付', itemStyle: { color: '#409EFF' } },
+        { value: 300, name: '已取消', itemStyle: { color: '#F56C6C' } }
+      ]
+    }
+  ]
+})
+
+// ========== 面积图：近7天销售额 ==========
+const areaOption = reactive({
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    boundaryGap: false,
+    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+  },
+  yAxis: { type: 'value' },
+  series: [
+    {
+      type: 'line',
+      smooth: true,
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0, y: 0, x2: 0, y2: 1,
+          colorStops: [
+            { offset: 0, color: 'rgba(103, 194, 58, 0.4)' },
+            { offset: 1, color: 'rgba(103, 194, 58, 0.05)' }
+          ]
+        }
+      },
+      data: [12000, 15000, 13500, 18000, 16500, 22000, 19800],
+      itemStyle: { color: '#67C23A' }
+    }
+  ]
+})
 </script>
 
 <style lang="scss" scoped>
-/* 页面容器：限制最大高度，防止撑破屏幕 */
-.order-page-container {
-  height: 100%;
-  padding: 15px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 主卡片：占据全部可用空间 */
-.main-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px; /* 圆角更柔和 */
-}
-
-/* 去除 Element Card 默认的 body padding，改为自定义布局 */
-:deep(.el-card__body) {
-  padding: 0;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 顶部工具栏：Flex 左右布局 */
-.card-header-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 15px 0 15px; /* 上左右有内边距，下无 */
-  flex-shrink: 0; /* 防止被压缩 */
-}
-
-.search-form {
-  margin-bottom: 0; /* 消除 form 默认间距 */
-}
-
-/* 表格包装器：核心！利用 flex:1 占据剩余所有空间 */
-.table-wrapper {
-  flex: 1;
+.dashboard {
   padding: 20px;
-  overflow: hidden; /* 隐藏溢出，让 el-table 内部处理滚动 */
-  height: 400px; /* 关键：允许 flex 子项收缩到比内容更小 */
+  background: #f0f2f5;
+  min-height: 100vh;
 }
 
-/* 分页器区域 */
-.pagination-container {
-  padding: 10px;
-  padding-top: 0;
+/* 数据卡片行 */
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.data-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  font-size: 14px;
+  color: #909399;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #303133;
+  margin-bottom: 8px;
+}
+
+.card-trend {
+  font-size: 13px;
+}
+
+.card-trend.up {
+  color: #67C23A;
+}
+
+.card-trend.down {
+  color: #F56C6C;
+}
+
+/* 图表行 */
+.chart-row {
   display: flex;
-  justify-content: flex-end;
-  flex-shrink: 0;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.chart-box {
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.chart-box h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #303133;
+}
+
+.chart-box.half {
+  flex: 1;
+}
+
+/* vue-echarts 组件需要设置高度 */
+.chart-box :deep(.echarts) {
+  height: 300px;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .card-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chart-row {
+    flex-direction: column;
+  }
 }
 </style>
