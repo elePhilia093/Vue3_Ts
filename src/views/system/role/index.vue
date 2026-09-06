@@ -135,7 +135,7 @@
 
     <MenuDialog
       v-model:visible="menuDialogVisible"
-      :role-info="currentRow"
+      :role-info="currentRole"
       @success="handleMenuSuccess"
     />
   </div>
@@ -145,7 +145,7 @@
 import RoleDialog from "./components/RoleDialog.vue";
 import MenuDialog from "./components/MenuDialog.vue";
 
-import { fetchRoleList, deleteRole, fetchRoleListAll } from "@/api/role";
+import { fetchRoleListAPI, deleteRole } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import type { User } from "@/types/user";
@@ -169,7 +169,7 @@ const tableData = ref<User[]>([]);
 const getList = async () => {
   loading.value = true;
   try {
-    const result = await fetchRoleList(queryParams);
+    const result = await fetchRoleListAPI(queryParams);
     console.log(result);
     if (result.code == 200) {
       tableData.value = result.data.records;
@@ -209,7 +209,7 @@ const dialogVisible = ref(false);
 const currentRow = ref(null); // 用于存储当前正在编辑的行数据
 
 const menuDialogVisible = ref(false);
-
+const currentRole = ref({});
 // 新增用户
 const handleAdd = () => {
   currentRow.value = null;
@@ -232,7 +232,11 @@ const handleDelete = async (row: any) => {
 
 // 分配菜单
 const handleAssignMenu = (row: any) => {
-  currentRow.value = row;
+  currentRole.value = {
+    id: row.id,
+    roleName: row.roleName,
+  };
+
   menuDialogVisible.value = true;
 };
 

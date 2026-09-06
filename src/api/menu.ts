@@ -52,3 +52,19 @@ export const assignMenuAPI = (data: {}) => {
     data
   })
 }
+
+export function getRoleMenuAPI(roleId) {
+  return request({
+    url: `/sys/role/menu/${roleId}`,
+    method: 'get'
+  })
+}
+
+// 保存角色菜单权限
+export function saveRoleMenuAPI(data) {
+  return request({
+    url: '/sys/role/menu/save',
+    method: 'put',
+    data
+  })
+}

@@ -68,33 +68,21 @@
         style="width: 100%"
         height="100%"
       >
-        <el-table-column prop="id" label="ID"  align="center" />
+        <el-table-column prop="id" label="ID" align="center" />
         <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="employeeId" label="员工ID"  />
-        <el-table-column prop="status" label="状态"  align="center">
+        <el-table-column prop="employeeId" label="员工ID" />
+        <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
               {{ scope.row.status === 1 ? "正常" : "停用" }}
             </el-tag>
           </template>
         </el-table-column>
-         <el-table-column
-          prop="remark"
-          label="备注"
-          align="center"
-        />
+        <el-table-column prop="remark" label="备注" align="center" />
 
-        <el-table-column
-          prop="createTime"
-          label="创建时间"
-          align="center"
-        />
+        <el-table-column prop="createTime" label="创建时间" align="center" />
 
-        <el-table-column
-          prop="updateTime"
-          label="更新时间"
-          align="center"
-        />
+        <el-table-column prop="updateTime" label="更新时间" align="center" />
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
@@ -148,6 +136,7 @@
     <!-- 分配角色弹窗 -->
     <AssignRoleDialog
       v-model:visible="roleDialogVisible"
+      :all-roles="allRoles"
       :user-info="currentUser"
       @success="handleRoleSuccess"
     />
@@ -156,6 +145,7 @@
 
 <script setup lang="ts">
 import { userListAPI, userDeleteAPI } from "@/api/user";
+import { roleListAllAPI } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
 import UserFormDialog from "./components/UserFormDialog.vue";
@@ -173,6 +163,8 @@ const queryParams = reactive({
   current: 1,
   size: 10,
 });
+
+const allRoles = ref([]);
 
 // 表格数据 (对应你的数据库字段)
 const tableData = ref([]);
@@ -252,9 +244,28 @@ const handleDelete = async (row: any) => {
 };
 
 // 分配角色
-const handleAssignRole = (row: any) => {
-  currentUser.value = row;
-  roleDialogVisible.value = true;
+const handleAssignRole = async (row: any) => {
+  currentUser.value = {
+    id: row.id,
+    username: row.username,
+  };
+
+  try {
+    // 查询全部角色
+    const result = await roleListAllAPI();
+
+    if (result.code !== 200) {
+      ElMessage.error(result.message || "获取角色列表失败");
+      return;
+    }
+
+    allRoles.value = result.data || [];
+
+    // 打开弹窗
+    roleDialogVisible.value = true;
+  } catch (error) {
+    ElMessage.error("获取角色列表失败");
+  }
 };
 
 // 控制弹窗显隐

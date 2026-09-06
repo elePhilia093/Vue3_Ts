@@ -42,3 +42,24 @@ export function userDeleteAPI(id: number) {
     method: "delete",
   });
 }
+
+
+// 查询用户角色
+export function getUserRoleAPI(userId) {
+  return request({
+    url: `/sys/user/role/${userId}`,
+    method: 'get'
+  })
+}
+
+// 保存用户角色
+export function saveUserRoleAPI(userId, roleIds) {
+  return request({
+    url: `/sys/user/role/${userId}`,
+    method: 'put',
+    data: {
+      userId: userId,
+      roleIds: roleIds
+    }
+  })
+}

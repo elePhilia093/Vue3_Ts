@@ -3,7 +3,7 @@ import request from '../utils/request'
 
 const roleApi = '/sys/role';
 
-export const fetchRoleList = (params: {}) => {
+export const fetchRoleListAPI = (params: {}) => {
   return request({
     url: roleApi + '/list',
     method: 'get',
@@ -11,10 +11,10 @@ export const fetchRoleList = (params: {}) => {
   })
 }
 
-export const fetchRoleListAll = () => {
+export function roleListAllAPI() {
   return request({
-    url: roleApi + '/list',
-    method: 'get',
+    url: '/sys/role/all',
+    method: 'get'
   })
 }
 
@@ -40,3 +40,6 @@ export const deleteRole = (id: number) => {
     method: 'delete',
   })
 }
+
+// 查询角色已有菜单
+
