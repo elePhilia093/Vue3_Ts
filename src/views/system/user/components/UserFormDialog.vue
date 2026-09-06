@@ -6,39 +6,30 @@
     @close="handleClose"
     destroy-on-close
   >
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      label-width="80px"
-    >
+    <el-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
       <!-- 用户名：编辑时通常不可修改 -->
       <el-form-item label="用户名" prop="username">
-        <el-input 
-          v-model="formData.username" 
-          placeholder="请输入用户名" 
-          :disabled="isEdit" 
+        <el-input
+          v-model="formData.username"
+          placeholder="请输入用户名"
         />
       </el-form-item>
 
       <!-- 密码 -->
       <el-form-item label="密码" prop="password">
-        <el-input v-model="formData.password" placeholder="请输入密码" type="text" />
+        <el-input
+          v-model="formData.password"
+          :placeholder="isEdit ? '不修改密码请留空' : '请输入密码'"
+          type="text"
+        />
       </el-form-item>
 
-      <!-- 昵称 -->
-      <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="formData.nickname" placeholder="请输入昵称" />
-      </el-form-item>
-
-      <!-- 手机号 -->
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="formData.phone" placeholder="请输入手机号" maxlength="11" />
-      </el-form-item>
-
-      <!-- 邮箱 -->
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="formData.email" placeholder="请输入邮箱" />
+      <el-form-item label="员工ID" prop="employeeId">
+        <el-input
+          v-model="formData.employeeId"
+          placeholder="请输入员工ID"
+          type="text"
+        />
       </el-form-item>
 
       <!-- 状态 -->
@@ -47,6 +38,16 @@
           <el-radio :value="1">正常</el-radio>
           <el-radio :value="0">禁用</el-radio>
         </el-radio-group>
+      </el-form-item>
+
+      <!-- 备注 -->
+      <el-form-item label="备注" prop="remark">
+        <el-input
+          v-model="formData.remark"
+          placeholder="请输入备注"
+          type="textarea"
+          :rows="3"
+        />
       </el-form-item>
     </el-form>
 
@@ -62,19 +63,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch, computed } from 'vue';
-import { ElMessage } from 'element-plus';
-import type { FormInstance } from 'element-plus'
-import { addUserAPI, updateUserAPI } from '@/api/user';
-import type { UpdateUserRequest } from '@/types/user';
+import { ref, reactive, watch, computed } from "vue";
+import { ElMessage } from "element-plus";
+import type { FormInstance } from "element-plus";
+import {userAddAPI, userUpdateAPI} from "@/api/user";
 // 定义 Props
 const props = defineProps({
   modelValue: Boolean, // 控制弹窗显示隐藏
-  userData: Object     // 编辑时传入的行数据，新增时为 null/undefined
+  userData: Object, // 编辑时传入的行数据，新增时为 null/undefined
 });
 
 // 定义 Emits
-const emit = defineEmits(['update:modelValue', 'success']);
+const emit = defineEmits(["update:modelValue", "success"]);
 
 const formRef = ref<FormInstance>();
 const loading = ref(false);
@@ -82,12 +82,11 @@ const loading = ref(false);
 // 表单默认数据结构
 const defaultForm = {
   id: undefined,
-  username: '',
-  nickname: '',
-  phone: '',
-  email: '',
-  password: '',
-  status: ''
+  username: "",
+  password: "",
+  employeeId: undefined,
+  status: 1,
+  remark: "",
 };
 
 // 使用 reactive 创建响应式表单数据
@@ -99,7 +98,7 @@ const isEdit = computed(() => !!formData.id);
 // 监听 props.modelValue 变化，同步给内部 visible
 const visible = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: (val) => emit("update:modelValue", val),
 });
 
 const resetForm = () => {
@@ -107,47 +106,71 @@ const resetForm = () => {
 };
 
 // 监听 userData 变化，回显数据
-watch(() => props.userData, (newVal) => {
-  if (newVal) {
-    // 编辑模式：将行数据拷贝到表单中
-    Object.assign(formData, newVal);
-  } else {
-    // 新增模式：重置表单
-    resetForm();
-  }
-}, { immediate: true });
+watch(
+  () => props.userData,
+  (newVal) => {
+    if (newVal) {
+      console.log(newVal);
+      
+      Object.assign(formData, newVal);
+    } else {
+      // 新增模式：重置表单
+      resetForm();
+    }
+  },
+  { immediate: true },
+);
 
 // 表单校验规则
 const rules = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-  nickname: [{ required: true, message: '请输入昵称', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
-    { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+  username: [
+    {
+      required: true,
+      message: "请输入登录账号",
+      trigger: "blur",
+    },
   ],
-  email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
-    { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
-  ]
+
+  password: [
+   {
+      validator: (rule, value, callback) => {
+        if (!isEdit.value && !value) {
+          callback(new Error('请输入密码'))
+          return
+        }
+
+        callback()
+      },
+      trigger: 'blur'
+    }
+  ],
+
+  status: [
+    {
+      required: true,
+      message: "请选择账号状态",
+      trigger: "change",
+    },
+  ],
 };
 
 // 提交逻辑
 const handleSubmit = async () => {
   if (!formRef.value) return;
-  
+
   await formRef.value.validate(async (valid) => {
     if (valid) {
       loading.value = true;
       try {
         // TODO: 在这里调用你的 API
-        if (isEdit.value) await updateUserAPI(formData as UpdateUserRequest);
-        else await addUserAPI(formData);
-        
+        if (isEdit.value) await userUpdateAPI(formData);
+        else await userAddAPI(formData);
+
         visible.value = false; // 关闭弹窗
-        emit('success');       // 通知父组件刷新列表
+        emit("success"); // 通知父组件刷新列表
       } catch (error) {
         console.error(error);
+        ElMessage.error(error.message);
       } finally {
         loading.value = false;
       }
@@ -160,6 +183,4 @@ const handleClose = () => {
   resetForm();
   if (formRef.value) formRef.value.clearValidate();
 };
-
-
 </script>

@@ -1,14 +1,14 @@
-import request from './index'
+import request from '../utils/request'
 
 
 
 const menuApi = '/sys/menu';
 
-export const fetchMenuListAPI = (data: {}) => {
+export const fetchMenuListAPI = (params: {}) => {
   return request({
-    url: menuApi + '/list',
-    method: 'post',
-    data
+    url: menuApi + '/tree',
+    method: 'get',
+    params
   })
 }
 
@@ -23,16 +23,15 @@ export const addMenuAPI = (data: {}) => {
 export const updateMenuAPI = (data: {}) => {
   return request({
     url: menuApi + '/update',
-    method: 'POST',
+    method: 'put',
     data
   })
 }
 
-export const deleteMenuAPI = (params: { id: number }) => {
+export const deleteMenuAPI = (id: number) => {
   return request({
-    url: menuApi + '/delete',
+    url: `${menuApi}/delete/${id}`,
     method: 'delete',
-    params
   })
 }
 

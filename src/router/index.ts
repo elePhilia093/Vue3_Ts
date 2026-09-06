@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
-
+import { useAuthStore } from '@/stores/auth';
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -77,22 +77,30 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('@/views/login/index.vue'),
     },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/register/index.vue'),
-    },
-    {
-      path: '/forgetpassword',
-      name: 'forgetpassword',
-      component: () => import('@/views/forgetpassword/index.vue'),
-    }
   ],
 });
 
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  // 已登录用户访问登录页，直接进入首页
+  if (to.path === '/login') {
+    if (authStore.token) {
+      return '/dashboard';
+    }
+
+    return true;
+  }
+
+  // 未登录用户访问其他页面，跳转登录页
+  if (!authStore.token) {
+    return '/login';
+  }
+
+  // 已登录，正常放行
+  return true;
+});
 export default router;

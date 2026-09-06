@@ -18,6 +18,11 @@
           <el-radio :value="0">禁用</el-radio>
         </el-radio-group>
       </el-form-item>
+
+      <!-- 备注 -->
+      <el-form-item label="备注">
+        <el-input v-model="formData.remark" type="textarea" placeholder="请输入备注" clearable />
+      </el-form-item>
     </el-form>
 
     <template #footer>
@@ -60,6 +65,7 @@ const defaultForm = {
   id: undefined as number | undefined,
   roleName: '',
   roleCode: '',
+  remark: "",
   status: 1, // 默认为启用
 };
 

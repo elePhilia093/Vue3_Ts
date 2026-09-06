@@ -11,6 +11,7 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    
     config.headers['token'] = localStorage.getItem('token') || ''
 
     return config
@@ -22,22 +23,17 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response: AxiosResponse) => {
-    if(response.config.responseType === 'blob'){
+   if (response.config.responseType === 'blob') {
       return response
     }
-    
-    const res = response.data
-    
-    if(res.code !== 200){
-      ElMessage.error(res.message || '请求失败')
-      return Promise.reject(res)
+    const result = response.data
+
+    // 后端业务处理失败
+    if (result.code !== 200) {
+      return Promise.reject(result)
     }
 
-    if(res.code == 200 && res.message){
-      
-    }
-    
-    return res.data 
+    return result
   },
   (error) => {
     if (error.response && error.response.status) {

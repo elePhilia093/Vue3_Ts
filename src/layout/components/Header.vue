@@ -18,7 +18,7 @@
         />
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            欢迎您：{{userStore.userInfo.username || '用户' }}
+            欢迎您：{{ authStore.userInfo?.username ||'用户' }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>
@@ -37,9 +37,9 @@
 <script setup lang="ts">
 import { ArrowDown } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
+import { useAuthStore } from "@/stores/auth";
 import { ref, onMounted, watch } from "vue";
-const userStore = useUserStore();
+const authStore = useAuthStore();
 const router = useRouter();
 
 interface BreadcrumbItem {
@@ -73,7 +73,9 @@ const handleCommand = (command: string) => {
   if (command === "logout") {
     // 执行退出登录操作
     localStorage.clear()
+    authStore.logout();
     router.push("/login");
+    console.log("用户已退出登录");
   }
 };
 </script>

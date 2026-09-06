@@ -1,54 +1,44 @@
-import request from './index'
+import request from "@/utils/request";
 
-import type {UserPageResult, UpdateUserRequest} from '@/types/user'
-
-
-export const fetchUserListAPI = (data: {}) => {
-  return request<UserPageResult>({
-    url: '/user/page',
-    method: 'post',
-    data,
-  })
-}
-
-// 新增用户
-export const addUserAPI = (data: {}) => {
+/**
+ * 用户分页查询
+ */
+export function userListAPI(params: {}) {
   return request({
-    url: '/user/add',
-    method: 'post',
-    data,
-  })
-}
-
-// 更新用户
-export const updateUserAPI = (data: UpdateUserRequest) => {
-  return request({
-    url: '/user/update',
-    method: 'put',
-    data,
-  })
-}
-
-// 删除用户
-export const deleteUserAPI = (id: number) => {
-  return request({
-    url: `/user/delete/${id}`,
-    method: 'delete',
-  })
-}
-
-export const assignRolesAPI = (data: { userId: number, roleIds: number[] }) => {
-  return request({
-    url: '/sysUserRole/assign',
-    method: 'post',
-    data,
-  })
-}
-
-export const getRolesByUserIdAPI = ( params: { userId: number }) => {
-  return request({
-    url: `/sysUserRole/list`,
-    method: 'get',
+    url: "/sys/user/list",
+    method: "get",
     params,
-  })
+  });
+}
+
+/**
+ * 新增用户
+ */
+export function userAddAPI(data: {}) {
+  return request({
+    url: "/sys/user/add",
+    method: "post",
+    data,
+  });
+}
+
+/**
+ * 修改用户
+ */
+export function userUpdateAPI(data: {}) {
+  return request({
+    url: "/sys/user/update",
+    method: "put",
+    data,
+  });
+}
+
+/**
+ * 删除用户
+ */
+export function userDeleteAPI(id: number) {
+  return request({
+    url: `/sys/user/${id}`,
+    method: "delete",
+  });
 }

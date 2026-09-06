@@ -4,15 +4,27 @@
     <el-card class="search-card" shadow="never">
       <el-form :inline="true" :model="queryParams" class="search-form">
         <el-form-item label="角色名称">
-          <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" clearable />
+          <el-input
+            v-model="queryParams.roleName"
+            placeholder="请输入角色名称"
+            clearable
+          />
         </el-form-item>
         <el-form-item label="角色代码">
-          <el-input v-model="queryParams.roleCode" placeholder="请输入角色代码" clearable />
+          <el-input
+            v-model="queryParams.roleCode"
+            placeholder="请输入角色代码"
+            clearable
+          />
         </el-form-item>
 
-
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 150px">
+          <el-select
+            v-model="queryParams.status"
+            placeholder="请选择状态"
+            clearable
+            style="width: 150px"
+          >
             <el-option label="全部" value="" />
             <el-option label="启用" :value="1" />
             <el-option label="禁用" :value="0" />
@@ -23,12 +35,14 @@
           <el-button type="primary" @click="handleSearch">
             <el-icon>
               <Search />
-            </el-icon> 查询
+            </el-icon>
+            查询
           </el-button>
           <el-button @click="resetQuery">
             <el-icon>
               <Refresh />
-            </el-icon> 重置
+            </el-icon>
+            重置
           </el-button>
         </el-form-item>
       </el-form>
@@ -40,15 +54,21 @@
         <el-button type="primary" plain @click="handleAdd">
           <el-icon>
             <Plus />
-          </el-icon> 新增角色
+          </el-icon>
+          新增角色
         </el-button>
       </div>
 
-      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" height="100%">
-        <!-- <el-table-column prop="id" label="ID" width="80" align="center" /> -->
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        border
+        stripe
+        style="width: 100%"
+        height="100%"
+      >
         <el-table-column prop="roleName" label="角色名称" />
         <el-table-column prop="roleCode" label="角色代码" />
-
 
         <el-table-column prop="status" label="状态">
           <template #default="scope">
@@ -58,16 +78,32 @@
           </template>
         </el-table-column>
 
+        <el-table-column prop="remark" label="备注" />
+
         <el-table-column prop="createTime" label="创建时间" />
 
         <el-table-column prop="updateTime" label="更新时间" />
 
         <el-table-column label="操作" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button link type="info" size="small" @click="handleAssignMenu(scope.row)">分配菜单</el-button>
-            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
-
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              link
+              type="info"
+              size="small"
+              @click="handleAssignMenu(scope.row)"
+              >分配菜单</el-button
+            >
+            <el-popconfirm
+              title="确认删除吗？"
+              @confirm="handleDelete(scope.row)"
+            >
               <template #reference>
                 <el-button link type="danger" size="small">删除</el-button>
               </template>
@@ -78,38 +114,41 @@
 
       <!-- 分页组件 -->
       <div class="pagination-container">
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="total"
-          :page-sizes="[2, 4, 6, 20]" :page-size="queryParams.pageSize" @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" />
+        <el-pagination
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          :page-sizes="[2, 4, 6, 20]"
+          :page-size="queryParams.size"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </el-card>
 
     <!-- 引用封装好的弹窗组件 -->
-     <RoleDialog 
-      v-model="dialogVisible" 
-      :row-data="currentRow" 
-      @success="getList" 
+    <RoleDialog
+      v-model="dialogVisible"
+      :row-data="currentRow"
+      @success="getList"
     />
 
-     <MenuDialog 
-       v-model:visible="menuDialogVisible" 
-      :role-info="currentRow" 
-      @success="handleMenuSuccess" 
+    <MenuDialog
+      v-model:visible="menuDialogVisible"
+      :role-info="currentRow"
+      @success="handleMenuSuccess"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import RoleDialog from './components/RoleDialog.vue'
-import MenuDialog from './components/MenuDialog.vue'
+import RoleDialog from "./components/RoleDialog.vue";
+import MenuDialog from "./components/MenuDialog.vue";
 
-import { fetchRoleList, deleteRole } from "@/api/role";
+import { fetchRoleList, deleteRole, fetchRoleListAll } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
-import type { User } from '@/types/user'
-import { useUserStore } from '@/stores/user'
-
-const userStore = useUserStore()
+import type { User } from "@/types/user";
 
 // --- 模拟数据与逻辑 ---
 const loading = ref(false);
@@ -119,9 +158,9 @@ const total = ref(0);
 const queryParams = reactive({
   roleName: "",
   roleCode: "",
-  status: '',
-  pageSize: 4,
-  pageNum: 1,
+  status: 1,
+  size: 4,
+  current: 1,
 });
 
 // 表格数据 (对应你的数据库字段)
@@ -130,11 +169,14 @@ const tableData = ref<User[]>([]);
 const getList = async () => {
   loading.value = true;
   try {
-    const res = await fetchRoleList(queryParams);
-    tableData.value = res.records;
-    total.value = res.total;
+    const result = await fetchRoleList(queryParams);
+    console.log(result);
+    if (result.code == 200) {
+      tableData.value = result.data.records;
+      total.value = result.data.total;
+    }
   } catch (error) {
-    
+    console.log(error);
   } finally {
     loading.value = false;
   }
@@ -142,12 +184,12 @@ const getList = async () => {
 
 // 分页处理
 const handleSizeChange = (val: number) => {
-  queryParams.pageSize = val;
+  queryParams.size = val;
   getList();
 };
 
 const handleCurrentChange = (val: number) => {
-  queryParams.pageNum = val;
+  queryParams.current = val;
   getList();
 };
 
@@ -168,7 +210,6 @@ const currentRow = ref(null); // 用于存储当前正在编辑的行数据
 
 const menuDialogVisible = ref(false);
 
-
 // 新增用户
 const handleAdd = () => {
   currentRow.value = null;
@@ -186,9 +227,7 @@ const handleDelete = async (row: any) => {
   try {
     await deleteRole(row.id);
     getList();
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
 // 分配菜单
@@ -199,11 +238,8 @@ const handleAssignMenu = (row: any) => {
 
 // 分配菜单成功后的回调
 const handleMenuSuccess = async () => {
-  await userStore.handleUserInfo();
   getList();
 };
-
-
 
 onMounted(() => {
   getList();

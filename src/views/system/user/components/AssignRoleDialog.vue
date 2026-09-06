@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import { fetchRoleListAll } from '@/api/role'
-import { getRolesByUserIdAPI, assignRolesAPI } from '@/api/user'
+// import { fetchRoleListAll } from '@/api/role'
+// import { getRolesByUserIdAPI, assignRolesAPI } from '@/api/user'
 
 
 // 定义 Props 和 Emits 的类型
@@ -51,20 +51,7 @@ const submitting = ref(false);
 
 // 3. 监听弹窗打开，获取数据
 watch(() => props.visible, async (val) => {
-  if (val && props.userInfo) {
-    // 获取所有角色列表
-    const res = await fetchRoleListAll();
-    allRoles.value = res;
-    console.log("allRoles",res);
-    
-
-    // 获取当前用户已有的角色ID
-    const userRes = await getRolesByUserIdAPI({ userId: props.userInfo.id });
-    console.log("userRes",userRes);
-    
-    selectedRoleIds.value = userRes.map(item => item.id);
-
-  }
+ 
 });
 
 // 4. 关闭弹窗并重置数据
@@ -78,12 +65,7 @@ const handleSubmit = async () => {
   if (!props.userInfo) return;
   submitting.value = true;
   try {
-    // TODO: 替换为真实的分配角色 API
-    await assignRolesAPI({ userId: props.userInfo.id, roleIds: selectedRoleIds.value });
-
-    console.log('提交的角色ID:', selectedRoleIds.value);
-    emit('success');
-    handleClose();
+   
   } catch (error) {
     ElMessage.error('分配角色失败');
   } finally {

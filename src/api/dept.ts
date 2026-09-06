@@ -1,4 +1,4 @@
-import request from "@/api/index";
+import request from "@/utils/request";
 
 
 
@@ -21,7 +21,7 @@ export const addDeptAPI = (data: any) => {
 export const updateDeptAPI = (data: any) => {
   return request({
     url: "/sys/dept/update",
-    method: "post",
+    method: "put",
     data,
   });
 }
@@ -29,6 +29,6 @@ export const updateDeptAPI = (data: any) => {
 export const deleteDeptAPI = (id: number) => {
   return request({
     url: "/sys/dept/delete/" + id,
-    method: "post",
+    method: "delete",
   });
 }

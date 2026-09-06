@@ -11,7 +11,7 @@
 
       <!-- 菜单类型 -->
       <el-form-item label="菜单类型" prop="menuType">
-        <el-radio-group v-model="form.menuType" @change="handleMenuTypeChange">
+        <el-radio-group :disabled="dialogTitle == '编辑菜单'" v-model="form.menuType" @change="handleMenuTypeChange">
           <el-radio :value="1">目录</el-radio>
           <el-radio :value="2">菜单</el-radio>
           <el-radio :value="3">按钮</el-radio>

@@ -48,7 +48,6 @@
           </el-form-item>
           <div class="form-actions">
             <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
-            <el-link type="primary" underline="hover" @click="router.push('/forgetpassword')">忘记密码？</el-link>
           </div>
 
           <el-button
@@ -59,11 +58,6 @@
           >
             {{ loading ? "验证中..." : "登 录" }}
           </el-button>
-          <div class="form-footer">
-            还没有账号？<el-link type="primary" underline="hover" @click="router.push('/register')"
-              >立即注册</el-link
-            >
-          </div>
         </el-form>
       </div>
     </div>
@@ -74,13 +68,13 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormInstance, type FormRules } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
-import { loginAPI, userInfoAPI } from "@/api/login";
-import { useUserStore } from "@/stores/user";
-const userStore = useUserStore();
+import { loginAPI } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
 
 const router = useRouter();
 const route = useRoute();
-const {query} = route;
+const { query } = route;
 interface LoginFormState {
   username: string;
   password: string;
@@ -111,13 +105,15 @@ const handleLogin = () => {
       try {
         loading.value = true;
         const result = await loginAPI(loginForm);
-        localStorage.setItem("token", result.token);
-        userStore.token = result.token;
-        await userStore.handleUserInfo();
+        if (result.code == 200) {
+          localStorage.setItem("token", result.data.token);
+          authStore.token = result.data.token;
+          authStore.handleUserInfo();
+        }
         if (query.redirect) {
           router.push(query.redirect as string);
-        }else{
-          router.push('/dashboard');
+        } else {
+          router.push("/dashboard");
         }
         ElMessage.success("登录成功！");
       } catch (error) {
@@ -131,7 +127,7 @@ const handleLogin = () => {
 // const handleUserInfo = async () => {
 //   try {
 //     const result = await userInfoAPI();
-//     userStore.userInfo = result;
+//     authStore.userInfo = result;
 //   } catch (error) {
 //     console.error("获取用户信息失败:", error);
 //   }

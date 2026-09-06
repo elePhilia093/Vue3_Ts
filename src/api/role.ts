@@ -1,13 +1,13 @@
-import request from './index'
+import request from '../utils/request'
 
 
 const roleApi = '/sys/role';
 
-export const fetchRoleList = (data: {}) => {
+export const fetchRoleList = (params: {}) => {
   return request({
-    url: roleApi + '/page',
-    method: 'post',
-    data,
+    url: roleApi + '/list',
+    method: 'get',
+    params,
   })
 }
 

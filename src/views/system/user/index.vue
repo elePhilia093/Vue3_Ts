@@ -4,15 +4,28 @@
     <el-card class="search-card" shadow="never">
       <el-form :inline="true" :model="queryParams" class="search-form">
         <el-form-item label="用户名">
-          <el-input v-model="queryParams.username" placeholder="请输入用户名" clearable />
+          <el-input
+            v-model="queryParams.username"
+            placeholder="请输入用户名"
+            clearable
+          />
         </el-form-item>
 
-        <el-form-item label="手机号">
-          <el-input v-model="queryParams.phone" placeholder="请输入手机号" clearable />
+        <el-form-item label="员工ID">
+          <el-input
+            v-model="queryParams.employeeId"
+            placeholder="请输入员工ID"
+            clearable
+          />
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-select v-model="queryParams.status" placeholder="请选择状态" clearable style="width: 150px">
+          <el-select
+            v-model="queryParams.status"
+            placeholder="请选择状态"
+            clearable
+            style="width: 150px"
+          >
             <el-option label="全部" value="" />
             <el-option label="启用" :value="1" />
             <el-option label="禁用" :value="0" />
@@ -23,12 +36,14 @@
           <el-button type="primary" @click="handleSearch">
             <el-icon>
               <Search />
-            </el-icon> 查询
+            </el-icon>
+            查询
           </el-button>
           <el-button @click="resetQuery">
             <el-icon>
               <Refresh />
-            </el-icon> 重置
+            </el-icon>
+            重置
           </el-button>
         </el-form-item>
       </el-form>
@@ -40,73 +55,111 @@
         <el-button type="primary" plain @click="handleAdd">
           <el-icon>
             <Plus />
-          </el-icon> 新增用户
+          </el-icon>
+          新增用户
         </el-button>
       </div>
 
-      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" height="100%">
-        <!-- <el-table-column prop="id" label="ID" width="80" align="center" /> -->
-        <el-table-column prop="username" label="用户名" min-width="120" />
-        <el-table-column prop="nickname" label="昵称" min-width="120" />
-        <el-table-column prop="phone" label="手机号" width="120" />
-        <el-table-column prop="email" label="邮箱" min-width="150" show-overflow-tooltip />
-
-        <!-- <el-table-column prop="gender" label="性别" width="80" align="center">
-          <template #default="scope">
-            {{ scope.row.gender === 'male' ? '男' : scope.row.gender === 'female' ? '女' : '-' }}
-          </template>
-</el-table-column> -->
-
-        <!-- <el-table-column prop="age" label="年龄" width="80" align="center" /> -->
-
-        <el-table-column prop="status" label="状态" width="100" align="center">
+      <el-table
+        v-loading="loading"
+        :data="tableData"
+        border
+        stripe
+        style="width: 100%"
+        height="100%"
+      >
+        <el-table-column prop="id" label="ID"  align="center" />
+        <el-table-column prop="username" label="用户名" />
+        <el-table-column prop="employeeId" label="员工ID"  />
+        <el-table-column prop="status" label="状态"  align="center">
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
               {{ scope.row.status === 1 ? "正常" : "停用" }}
             </el-tag>
           </template>
         </el-table-column>
+         <el-table-column
+          prop="remark"
+          label="备注"
+          align="center"
+        />
 
-        <el-table-column prop="createTime" label="创建时间" width="160" align="center" />
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          align="center"
+        />
+
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          align="center"
+        />
 
         <el-table-column label="操作" width="200" align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button link type="info" size="small" @click="handleAssignRole(scope.row)">分配角色</el-button>
-            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
-
+            <el-button
+              link
+              type="primary"
+              size="small"
+              @click="handleEdit(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              link
+              type="info"
+              size="small"
+              @click="handleAssignRole(scope.row)"
+              >分配角色</el-button
+            >
+            <el-popconfirm
+              title="确认删除吗？"
+              @confirm="handleDelete(scope.row)"
+            >
               <template #reference>
                 <el-button link type="danger" size="small">删除</el-button>
               </template>
             </el-popconfirm>
-
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 分页组件 -->
       <div class="pagination-container">
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="total"
-          :page-sizes="[2, 4, 6, 20]" :page-size="queryParams.pageSize" @size-change="handleSizeChange"
-          @current-change="handleCurrentChange" />
+        <el-pagination
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          :page-sizes="[1, 2, 4, 6, 20]"
+          :page-size="queryParams.size"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </el-card>
 
     <!-- 引用封装好的弹窗组件 -->
-    <UserFormDialog v-model="dialogVisible" :user-data="currentRow" @success="getList" />
+    <UserFormDialog
+      v-model="dialogVisible"
+      :user-data="currentRow"
+      @success="getList"
+    />
 
     <!-- 分配角色弹窗 -->
-    <AssignRoleDialog v-model:visible="roleDialogVisible" :user-info="currentUser" @success="handleRoleSuccess" />
+    <AssignRoleDialog
+      v-model:visible="roleDialogVisible"
+      :user-info="currentUser"
+      @success="handleRoleSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { fetchUserListAPI, deleteUserAPI } from "@/api/user";
+import { userListAPI, userDeleteAPI } from "@/api/user";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
-import UserFormDialog from './components/UserFormDialog.vue';
-import AssignRoleDialog from './components/AssignRoleDialog.vue';
-import type { User } from '@/types/user'
+import UserFormDialog from "./components/UserFormDialog.vue";
+import AssignRoleDialog from "./components/AssignRoleDialog.vue";
 
 // --- 模拟数据与逻辑 ---
 const loading = ref(false);
@@ -115,21 +168,26 @@ const total = ref(0);
 // 查询参数
 const queryParams = reactive({
   username: "",
-  phone: "",
-  status: '',
-  pageSize: 4,
-  pageNum: 1,
+  employeeId: undefined,
+  status: undefined,
+  current: 1,
+  size: 10,
 });
 
 // 表格数据 (对应你的数据库字段)
-const tableData = ref<User[]>([]);
+const tableData = ref([]);
 
 const getList = async () => {
   loading.value = true;
   try {
-    const res = await fetchUserListAPI(queryParams);
-    tableData.value = res.records;
-    total.value = res.total;
+    const data = {
+      ...queryParams,
+    };
+    const result = await userListAPI(data);
+    if (result.code == 200) {
+      tableData.value = result.data.records;
+      total.value = result.data.total;
+    }
   } catch (error) {
     console.error("获取用户列表失败:", error);
   } finally {
@@ -139,26 +197,29 @@ const getList = async () => {
 
 // 分页处理
 const handleSizeChange = (val: number) => {
-  queryParams.pageSize = val;
+  queryParams.size = val;
   getList();
 };
 
 const handleCurrentChange = (val: number) => {
-  queryParams.pageNum = val;
+  queryParams.current = val;
   getList();
 };
 
 const handleSearch = () => {
-  console.log("执行查询:", queryParams);
+  queryParams.current = 1;
   getList();
-  // TODO: 调用后端接口 this.list(new QueryWrapper<User>().like("username", ...))
 };
 
 const resetQuery = () => {
-  queryParams.username = "";
-  queryParams.phone = "";
-  queryParams.status = 1;
-  handleSearch();
+  Object.assign(queryParams, {
+    username: "",
+    employeeId: undefined,
+    status: undefined,
+    current: 1,
+    size: 10,
+  });
+  getList();
 };
 
 // 弹窗控制变量
@@ -173,33 +234,34 @@ const handleAdd = () => {
 
 // 编辑用户
 const handleEdit = (row: any) => {
-  currentRow.value = row;
+  currentRow.value = { ...row };
   dialogVisible.value = true;
 };
 
 // 删除用户
 const handleDelete = async (row: any) => {
   try {
-    await deleteUserAPI(row.id);
-    getList();
+    const result = await userDeleteAPI(row.id);
+    if (result.code == 200) {
+      ElMessage.success("删除成功");
+      getList();
+    }
   } catch (error) {
-    ElMessage.error('删除失败');
+    console.error("删除用户失败:", error);
   }
 };
 
 // 分配角色
 const handleAssignRole = (row: any) => {
-  console.log('分配角色:', row);
   currentUser.value = row;
   roleDialogVisible.value = true;
-}
+};
 
 // 控制弹窗显隐
 const roleDialogVisible = ref(false);
 
 // 当前选中要分配角色的用户
 const currentUser = ref<any>(null);
-
 
 // 分配角色成功后的回调
 const handleRoleSuccess = () => {
