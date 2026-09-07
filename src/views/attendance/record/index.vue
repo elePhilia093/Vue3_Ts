@@ -118,8 +118,6 @@
 
     <!-- 考勤记录 -->
     <el-card shadow="never" class="table-card">
-      <div class="card-title table-title">考勤记录</div>
-
       <el-table
         v-loading="loading"
         :data="tableData"
@@ -656,36 +654,37 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .record-container {
-  padding: 16px;
-}
-
-/* =========================
-   页面标题
-   ========================= */
-
-.page-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.page-title {
-  color: #303133;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
+.search-card {
+  flex-shrink: 0;
+  margin-bottom: 20px;
+  .search-form {
+    margin-bottom: -18px;
+  }
 }
 
-.page-desc {
-  margin-top: 4px;
-  color: #909399;
-  font-size: 13px;
-}
+.table-card {
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-.page-date {
-  color: #606266;
-  font-size: 14px;
+  .table-header {
+    margin-bottom: 15px;
+  }
+
+  /* 让表格区域自适应高度 */
+  :deep(.el-table) {
+    flex: 1;
+  }
 }
 
 /* =========================
@@ -779,10 +778,6 @@ onMounted(async () => {
    表格
    ========================= */
 
-.table-card {
-  height: 500px;
-  margin-bottom: 16px;
-}
 
 .time-text {
   color: #303133;

@@ -868,41 +868,39 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .leave-container {
-  padding: 16px;
-}
-
-/* =========================
-   页面标题
-   ========================= */
-
-.page-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.page-title {
-  color: #303133;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
+
+.search-card {
+  flex-shrink: 0;
+  margin-bottom: 20px;
+  .search-form {
+    margin-bottom: -18px;
+  }
 }
 
-.page-desc {
-  margin-top: 4px;
-  color: #909399;
-  font-size: 13px;
-}
+.table-card {
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-.page-date {
-  color: #606266;
-  font-size: 14px;
-}
+  .table-header {
+    margin-bottom: 15px;
+  }
 
-/* =========================
-   操作卡片
-   ========================= */
+  /* 让表格区域自适应高度 */
+  :deep(.el-table) {
+    flex: 1;
+  }
+}
 
 .operation-card {
   margin-bottom: 16px;
@@ -957,9 +955,6 @@ onMounted(async () => {
    表格
    ========================= */
 
-.table-card {
-  margin-bottom: 16px;
-}
 
 .empty-text {
   color: #c0c4cc;
