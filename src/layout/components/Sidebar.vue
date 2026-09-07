@@ -11,7 +11,7 @@
           <span>Dashboard</span>
         </el-menu-item>
         <!-- 交易管理 -->
-        <el-sub-menu index="/trade">
+        <!-- <el-sub-menu index="/trade">
           <template #title>
             <el-icon>
               <Money />
@@ -22,7 +22,7 @@
           <el-menu-item index="/trade/customers"> 测试页面1 </el-menu-item>
 
           <el-menu-item index="/trade/orders"> 测试页面2 </el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
 
         <!-- 员工管理 -->
         <el-sub-menu index="/hrm">

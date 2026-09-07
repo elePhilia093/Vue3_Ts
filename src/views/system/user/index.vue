@@ -4,31 +4,18 @@
     <el-card class="search-card" shadow="never">
       <el-form :inline="true" :model="queryParams" class="search-form">
         <el-form-item label="用户名">
-          <el-input
-            v-model="queryParams.username"
-            placeholder="请输入用户名"
-            clearable
-          />
+          <el-input v-model="queryParams.username" placeholder="请输入用户名" clearable />
         </el-form-item>
 
         <el-form-item label="员工姓名">
-          <el-select
-            v-model="queryParams.employeeId"
-            placeholder="请选择"
-            clearable
-            style="width: 150px"
-          >
-            <el-option label="全部" value="" />
+          <el-select v-model="queryParams.employeeName" placeholder="请选择" clearable style="width: 150px">
+            <el-option v-for="employee in employeeList" :key="employee.id" :label="employee.employeeName"
+              :value="employee.id" />
           </el-select>
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-select
-            v-model="queryParams.status"
-            placeholder="请选择"
-            clearable
-            style="width: 150px"
-          >
+          <el-select v-model="queryParams.status" placeholder="请选择" clearable style="width: 150px">
             <el-option label="全部" value="" />
             <el-option label="启用" :value="1" />
             <el-option label="禁用" :value="0" />
@@ -63,17 +50,10 @@
         </el-button>
       </div>
 
-      <el-table
-        v-loading="loading"
-        :data="tableData"
-        border
-        stripe
-        style="width: 100%"
-        height="100%"
-      >
+      <el-table v-loading="loading" :data="tableData" border stripe style="width: 100%" height="100%">
         <el-table-column prop="id" label="ID" align="center" />
         <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="employeeId" label="员工姓名" />
+        <el-table-column prop="employeeName" label="员工姓名" />
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
@@ -89,24 +69,9 @@
 
         <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="scope">
-            <el-button
-              link
-              type="primary"
-              size="small"
-              @click="handleEdit(scope.row)"
-              >编辑</el-button
-            >
-            <el-button
-              link
-              type="info"
-              size="small"
-              @click="handleAssignRole(scope.row)"
-              >分配角色</el-button
-            >
-            <el-popconfirm
-              title="确认删除吗？"
-              @confirm="handleDelete(scope.row)"
-            >
+            <el-button link type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button link type="info" size="small" @click="handleAssignRole(scope.row)">分配角色</el-button>
+            <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row)">
               <template #reference>
                 <el-button link type="danger" size="small">删除</el-button>
               </template>
@@ -117,37 +82,24 @@
 
       <!-- 分页组件 -->
       <div class="pagination-container">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          :page-sizes="[1, 2, 4, 6, 20]"
-          :page-size="queryParams.size"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="total"
+          :page-sizes="[1, 2, 4, 6, 20]" :page-size="queryParams.size" @size-change="handleSizeChange"
+          @current-change="handleCurrentChange" />
       </div>
     </el-card>
 
     <!-- 引用封装好的弹窗组件 -->
-    <UserFormDialog
-      v-model="dialogVisible"
-      :user-data="currentRow"
-      @success="getList"
-    />
+    <UserFormDialog v-model="dialogVisible" :employee-list="employeeList" :user-data="currentRow" @success="getList" />
 
     <!-- 分配角色弹窗 -->
-    <AssignRoleDialog
-      v-model:visible="roleDialogVisible"
-      :all-roles="allRoles"
-      :user-info="currentUser"
-      @success="handleRoleSuccess"
-    />
+    <AssignRoleDialog v-model:visible="roleDialogVisible" :all-roles="allRoles" :user-info="currentUser"
+      @success="handleRoleSuccess" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { userListAPI, userDeleteAPI } from "@/api/user";
+import { getEmployeeList } from "@/api/employee";
 import { roleListAllAPI } from "@/api/role";
 import { ref, reactive, onMounted } from "vue";
 import { Search, Refresh, Plus } from "@element-plus/icons-vue";
@@ -162,15 +114,32 @@ const total = ref(0);
 const queryParams = reactive({
   username: "",
   employeeId: undefined,
+  employeeName: undefined,
   status: undefined,
   current: 1,
   size: 10,
 });
 
 const allRoles = ref([]);
+const employeeList = ref([]);
 
 // 表格数据 (对应你的数据库字段)
 const tableData = ref([]);
+
+// 获取员工列表
+const getEmployee = async () => {
+  try {
+    const result = await getEmployeeList();
+    if (result.code == 200) {
+      employeeList.value = result.data.records;
+    }
+  } catch (error) {
+    console.error("获取员工列表失败:", error);
+    ElMessage.error(error.message || "获取员工列表失败");
+  }
+};
+
+
 
 const getList = async () => {
   loading.value = true;
@@ -285,6 +254,7 @@ const handleRoleSuccess = () => {
 
 onMounted(() => {
   getList();
+  getEmployee();
 });
 </script>
 

@@ -1,35 +1,21 @@
 <template>
-  <el-dialog
-    :title="isEdit ? '编辑用户' : '新增用户'"
-    v-model="visible"
-    width="500px"
-    @close="handleClose"
-    destroy-on-close
-  >
+  <el-dialog :title="isEdit ? '编辑用户' : '新增用户'" v-model="visible" width="500px" @close="handleClose" destroy-on-close>
     <el-form ref="formRef" :model="formData" :rules="rules" label-width="80px">
       <!-- 用户名：编辑时通常不可修改 -->
       <el-form-item label="用户名" prop="username">
-        <el-input
-          v-model="formData.username"
-          placeholder="请输入用户名"
-        />
+        <el-input v-model="formData.username" placeholder="请输入用户名" />
       </el-form-item>
 
       <!-- 密码 -->
       <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="formData.password"
-          :placeholder="isEdit ? '不修改密码请留空' : '请输入密码'"
-          type="text"
-        />
+        <el-input v-model="formData.password" :placeholder="isEdit ? '不修改密码请留空' : '请输入密码'" type="text" />
       </el-form-item>
 
-      <el-form-item label="员工ID" prop="employeeId">
-        <el-input
-          v-model="formData.employeeId"
-          placeholder="请输入员工ID"
-          type="text"
-        />
+      <el-form-item label="员工编号" prop="employeeId">
+        <el-select v-model="formData.employeeId" placeholder="请选择员工">
+          <el-option v-for="employee in employeeList" :key="employee.id" :label="employee.employeeName"
+            :value="employee.id" />
+        </el-select>
       </el-form-item>
 
       <!-- 状态 -->
@@ -42,12 +28,7 @@
 
       <!-- 备注 -->
       <el-form-item label="备注" prop="remark">
-        <el-input
-          v-model="formData.remark"
-          placeholder="请输入备注"
-          type="textarea"
-          :rows="3"
-        />
+        <el-input v-model="formData.remark" placeholder="请输入备注" type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
 
@@ -66,11 +47,12 @@
 import { ref, reactive, watch, computed } from "vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance } from "element-plus";
-import {userAddAPI, userUpdateAPI} from "@/api/user";
+import { userAddAPI, userUpdateAPI } from "@/api/user";
 // 定义 Props
 const props = defineProps({
-  modelValue: Boolean, // 控制弹窗显示隐藏
-  userData: Object, // 编辑时传入的行数据，新增时为 null/undefined
+  modelValue: Boolean,
+  userData: Object,
+  employeeList: Array,
 });
 
 // 定义 Emits
@@ -111,7 +93,7 @@ watch(
   (newVal) => {
     if (newVal) {
       console.log(newVal);
-      
+
       Object.assign(formData, newVal);
     } else {
       // 新增模式：重置表单
@@ -132,7 +114,7 @@ const rules = {
   ],
 
   password: [
-   {
+    {
       validator: (rule, value, callback) => {
         if (!isEdit.value && !value) {
           callback(new Error('请输入密码'))

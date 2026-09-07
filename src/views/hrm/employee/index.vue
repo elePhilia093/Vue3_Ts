@@ -17,9 +17,7 @@
           <el-col :span="8">
             <el-form-item label="所属部门">
               <el-select v-model="queryParams.deptId" placeholder="请选择所属部门" clearable style="width: 200px">
-                <el-option label="全部" value="" />
-                <el-option label="启用" :value="1" />
-                <el-option label="禁用" :value="0" />
+                <el-option v-for="dept in deptOptions" :key="dept.id" :label="dept.deptName" :value="dept.id" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -91,14 +89,17 @@
       </div>
     </el-card>
     <!-- 新增员工弹窗 -->
-    <EmployeeDialog v-model="dialogVisible" :edit-data="currentEditData" @save="handleSave" />
+    <EmployeeDialog v-model="dialogVisible" :dept-options="deptOptions" :edit-data="currentEditData"
+      @save="handleSave" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import { getEmployeeList } from "@/api/employee";
+import { getDeptListAPI } from '@/api/dept'
 import EmployeeDialog from "./component/addEmpDialog.vue";
+import { flattenDeptTree } from "@/utils/flattenDeptTree";
 
 const queryParams = reactive({
   employeeNo: undefined,
@@ -112,6 +113,22 @@ const queryParams = reactive({
 const tableData = ref([]);
 const total = ref(0);
 const loading = ref(false);
+const deptOptions = ref([]);
+
+// 获取部门列表
+const getDeptList = async () => {
+  try {
+    const result = await getDeptListAPI({});
+    if (result.code == 200) {
+      deptOptions.value = flattenDeptTree(result.data);
+    }
+  } catch (error) {
+    console.error("获取部门列表失败:", error);
+    ElMessage.error(error.message || "获取部门列表失败");
+  }
+}
+
+
 
 // 弹窗显隐状态
 const dialogVisible = ref(false)
@@ -151,7 +168,7 @@ const handleAdd = () => {
 // 编辑员工
 const handleEdit = (row) => {
   dialogVisible.value = true
-  currentEditData.value = {...row}
+  currentEditData.value = { ...row }
 }
 
 // 接收子组件抛出的保存数据
@@ -163,6 +180,7 @@ const handleSave = (formData) => {
 
 onMounted(() => {
   getList();
+  getDeptList();
 });
 
 

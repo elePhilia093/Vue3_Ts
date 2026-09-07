@@ -37,8 +37,7 @@
       </el-form-item>
       <el-form-item label="所属部门" prop="deptId">
         <el-select v-model="formData.deptId" placeholder="请选择部门">
-          <el-option label="技术部" :value="1" />
-          <el-option label="人事部" :value="2" />
+          <el-option v-for="item in deptOptions" :key="item.id" :label="item.deptName" :value="item.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="职位名称" prop="positionName">
@@ -64,6 +63,10 @@ const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
+  },
+  deptOptions: {
+    type: Array,
+    default: () => []
   },
   editData: {
     type: Object,
