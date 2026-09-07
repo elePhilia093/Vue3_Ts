@@ -1,15 +1,8 @@
 <template>
   <div class="layout-sidebar">
     <el-scrollbar>
-      <el-menu
-        router
-        :default-active="route.path"
-        class="custom-menu"
-        background-color="transparent"
-        text-color="#e0e6ed"
-        active-text-color="#ffffff"
-        :collapse="false"
-      >
+      <el-menu router :default-active="route.path" class="custom-menu" background-color="transparent"
+        text-color="#e0e6ed" active-text-color="#ffffff" :collapse="false">
         <el-menu-item index="/dashboard">
           <el-icon>
             <Odometer />
@@ -18,18 +11,30 @@
           <span>Dashboard</span>
         </el-menu-item>
         <!-- 交易管理 -->
-        <!-- <el-sub-menu index="/trade">
+        <el-sub-menu index="/trade">
           <template #title>
             <el-icon>
               <Money />
             </el-icon>
-            <span>交易管理</span>
+            <span>测试管理</span>
           </template>
 
-          <el-menu-item index="/trade/customers"> 客户信息 </el-menu-item>
+          <el-menu-item index="/trade/customers"> 测试页面1 </el-menu-item>
 
-          <el-menu-item index="/trade/orders"> 订单信息 </el-menu-item>
-        </el-sub-menu> -->
+          <el-menu-item index="/trade/orders"> 测试页面2 </el-menu-item>
+        </el-sub-menu>
+
+        <!-- 员工管理 -->
+        <el-sub-menu index="/hrm">
+          <template #title>
+            <el-icon>
+              <User />
+            </el-icon>
+            <span>人事管理</span>
+
+          </template>
+          <el-menu-item index="/hrm/employee"> 员工管理 </el-menu-item>
+        </el-sub-menu>
 
         <!-- 系统管理 -->
         <el-sub-menu index="/system">

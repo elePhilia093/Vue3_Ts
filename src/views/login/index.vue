@@ -3,10 +3,12 @@
     <!-- 左侧：品牌展示区 -->
     <div class="login-brand">
       <div class="brand-content">
-        <h1 class="brand-title">Your Logo</h1>
+        <div class="brand-logo">
+          <img src="@/images/logo.png" alt="logo" />
+        </div>
+
         <p class="brand-desc">
-          构建下一代企业级智能管理平台。<br />
-          安全、高效、极简。
+          企业员工数据管理系统
         </p>
       </div>
     </div>
@@ -30,7 +32,7 @@
           <el-form-item prop="username">
             <el-input
               v-model="loginForm.username"
-              placeholder="邮箱 / 手机号"
+              placeholder="请输入用户名"
               prefix-icon="User"
               clearable
             />
@@ -46,9 +48,6 @@
               clearable
             />
           </el-form-item>
-          <div class="form-actions">
-            <el-checkbox v-model="loginForm.rememberMe">记住我</el-checkbox>
-          </div>
 
           <el-button
             type="primary"
@@ -161,11 +160,16 @@ const handleLogin = () => {
   animation: fadeIn 1s ease-out;
 }
 
-.brand-title {
-  font-size: 48px;
-  font-weight: 800;
-  margin-bottom: 16px;
-  letter-spacing: -1px;
+.brand-logo {
+  width: 220px;
+  height: 120px;
+  margin-bottom: 20px;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
 }
 
 .brand-desc {

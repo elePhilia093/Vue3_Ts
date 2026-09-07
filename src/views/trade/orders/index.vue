@@ -36,9 +36,8 @@ import request from "@/utils/request";
 import { ref } from "vue";
 
 const testClick = () => {
-  console.log("点击了测试按钮");
   request({
-    url: "/sys/role/menu/1",
+    url: "/emp/employee/list?employeeName=张&current=1&size=10",
     method: "get",
   }).then((res) => {
     console.log(res);
@@ -47,7 +46,7 @@ const testClick = () => {
 
 const testClick2 = () => {
   request({
-    url: "/sys/menu/15",
+    url: "/emp/employee/delete/2",
     method: "delete",
   }).then((res) => {
     console.log(res);
@@ -56,11 +55,18 @@ const testClick2 = () => {
 
 const testClick3 = () => {
   request({
-    url: "/sys/role/menu",
-    method: "PUT",
+    url: "/emp/employee/update",
+    method: "put",
     data: {
-      roleId: 1,
-      menuIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17],
+      "id": 1,
+      "employeeNo": "E10001",
+      "employeeName": "张三",
+      "gender": 1,
+      "birthDate": "1998-05-10",
+      "phone": "13900000000",
+      "email": "zhangsan@example.com",
+      "deptId": 2,
+      "positionName": "高级Java开发"
     },
   });
 };

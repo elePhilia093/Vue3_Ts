@@ -37,6 +37,22 @@ const router = createRouter({
             },
           ],
         },
+        // --- 人事管理 (独立模块) ---
+        {
+          path: 'hrm', // 对应 UI 上的 "人事管理"
+          name: 'Hrm',
+          meta: { title: '人事管理', icon: 'user' },
+          // 注意：这里不需要 component，或者使用 <router-view> 占位
+          children: [
+            {
+              path: 'employee', // 路径变为 /hrm/employee
+              name: 'Employee',
+              meta: { title: '员工管理' },
+              component: () => import('@/views/hrm/employee/index.vue'),
+            },
+          ],
+        },
+        // 系统管理
         {
           path: 'system', // 对应 UI 上的 "系统管理"
           name: 'System',

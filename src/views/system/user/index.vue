@@ -11,18 +11,21 @@
           />
         </el-form-item>
 
-        <el-form-item label="员工ID">
-          <el-input
+        <el-form-item label="员工姓名">
+          <el-select
             v-model="queryParams.employeeId"
-            placeholder="请输入员工ID"
+            placeholder="请选择"
             clearable
-          />
+            style="width: 150px"
+          >
+            <el-option label="全部" value="" />
+          </el-select>
         </el-form-item>
 
         <el-form-item label="状态">
           <el-select
             v-model="queryParams.status"
-            placeholder="请选择状态"
+            placeholder="请选择"
             clearable
             style="width: 150px"
           >
@@ -70,7 +73,7 @@
       >
         <el-table-column prop="id" label="ID" align="center" />
         <el-table-column prop="username" label="用户名" />
-        <el-table-column prop="employeeId" label="员工ID" />
+        <el-table-column prop="employeeId" label="员工姓名" />
         <el-table-column prop="status" label="状态" align="center">
           <template #default="scope">
             <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
@@ -80,11 +83,11 @@
         </el-table-column>
         <el-table-column prop="remark" label="备注" align="center" />
 
-        <el-table-column prop="createTime" label="创建时间" align="center" />
+        <el-table-column prop="createTime" width="160" label="创建时间" align="center" />
 
-        <el-table-column prop="updateTime" label="更新时间" align="center" />
+        <el-table-column prop="updateTime" width="160" label="更新时间" align="center" />
 
-        <el-table-column label="操作" width="200" align="center" fixed="right">
+        <el-table-column label="操作" width="180" align="center" fixed="right">
           <template #default="scope">
             <el-button
               link
@@ -182,6 +185,7 @@ const getList = async () => {
     }
   } catch (error) {
     console.error("获取用户列表失败:", error);
+    ElMessage.error(error.message || "获取用户列表失败");
   } finally {
     loading.value = false;
   }

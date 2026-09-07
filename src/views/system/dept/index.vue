@@ -54,7 +54,7 @@
         :tree-props="{ children: 'children' }"
       >
         <!-- <el-table-column prop="id" label="ID"> </el-table-column> -->
-        <el-table-column prop="deptName" label="部门名称"> </el-table-column>
+        <el-table-column prop="deptName" label="部门名称" width="200"> </el-table-column>
         <el-table-column prop="deptCode" label="部门编码"> </el-table-column>
         <el-table-column prop="leaderId" label="部门负责人"> </el-table-column>
         <el-table-column
@@ -75,9 +75,10 @@
           prop="createTime"
           label="创建时间"
           show-overflow-tooltip
+          width="160"
         />
 
-        <el-table-column label="操作" min-width="220">
+        <el-table-column label="操作" min-width="120">
           <template #default="scope">
             <el-button
               link
@@ -141,6 +142,7 @@ const getList = async () => {
     }
   } catch (error) {
     console.log(error);
+    ElMessage.error(error.message || "获取部门列表失败");
   } finally {
     loading.value = false;
   }
