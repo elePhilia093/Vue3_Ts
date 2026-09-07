@@ -52,6 +52,27 @@ const router = createRouter({
             },
           ],
         },
+        // 考勤管理
+        {
+          path: 'attendance', // 对应 UI 上的 "考勤管理"
+          name: 'Attendance',
+          meta: { title: '考勤管理', icon: 'calendar' },
+          children: [
+            {
+              path: 'record',
+              name: 'Record',
+              meta: { title: '考勤记录' },
+              component: () => import('@/views/attendance/record/index.vue'),
+            },
+            {
+              path: 'apply',
+              name: 'Apply',
+              meta: { title: '请假管理' },
+              component: () => import('@/views/attendance/apply/index.vue'),
+            }
+          ]
+
+        },
         // 系统管理
         {
           path: 'system', // 对应 UI 上的 "系统管理"

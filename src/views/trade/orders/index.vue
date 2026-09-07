@@ -37,8 +37,14 @@ import { ref } from "vue";
 
 const testClick = () => {
   request({
-    url: "/emp/employee/list?employeeName=张&current=1&size=10",
-    method: "get",
+    url: "/emp/leave/add",
+    method: "post",
+    data: {
+      leaveType: 1,
+      startTime: "2026-09-12T09:00:00",
+      endTime: "2026-09-12T18:00:00",
+      reason: "个人事务",
+    },
   }).then((res) => {
     console.log(res);
   });
@@ -46,8 +52,8 @@ const testClick = () => {
 
 const testClick2 = () => {
   request({
-    url: "/emp/employee/delete/2",
-    method: "delete",
+    url: "/emp/leave/list?employeeId=6",
+    method: "get",
   }).then((res) => {
     console.log(res);
   });
@@ -55,18 +61,12 @@ const testClick2 = () => {
 
 const testClick3 = () => {
   request({
-    url: "/emp/employee/update",
+    url: "/emp/leave/audit",
     method: "put",
     data: {
-      "id": 1,
-      "employeeNo": "E10001",
-      "employeeName": "张三",
-      "gender": 1,
-      "birthDate": "1998-05-10",
-      "phone": "13900000000",
-      "email": "zhangsan@example.com",
-      "deptId": 2,
-      "positionName": "高级Java开发"
+      id: 1,
+      approvalStatus: 1,
+      approvalComment: "同意请假",
     },
   });
 };
