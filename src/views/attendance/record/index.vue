@@ -433,20 +433,6 @@ const checkInDisabled = computed(() => {
   return !!todayAttendance.value?.checkInTime;
 });
 
-/**
- * 下班打卡是否禁用
- */
-const checkOutDisabled = computed(() => {
-  if (!todayAttendance.value) {
-    return true;
-  }
-
-  if (!todayAttendance.value.checkInTime) {
-    return true;
-  }
-
-  return !!todayAttendance.value.checkOutTime;
-});
 
 /**
  * =========================

@@ -17,44 +17,81 @@ const router = createRouter({
           meta: { title: 'Dashboard', icon: 'dashboard' },
           component: () => import('@/views/dashboard/index.vue'),
         },
+        // --- 可视化分析 (独立模块) ---
         {
-          path: 'trade', // 对应 UI 上的 "交易管理"
+          path: 'visualization',
+          name: 'Visualization',
+          meta: { title: '可视化分析', icon: 'chart' },
+          component: () => import('@/views/visualization/index.vue'),
+        },
+        // --- 工资管理 (独立模块) ---
+        {
+          path: 'salary',
+          name: 'Salary',
+          meta: { title: '工资管理', icon: 'money' },
+          component: () => import('@/views/salary/index.vue'),
+        },
+        // --- 公告管理 (独立模块) ---
+        {
+          path: 'announcement',
+          name: 'Announcement',
+          meta: { title: '公告管理', icon: 'notification' },
+          component: () => import('@/views/announcement/index.vue'),
+        },
+        {
+          path: 'trade', 
           name: 'Trade',
           meta: { title: '交易管理', icon: 'money' },
-          // 注意：这里不需要 component，或者使用 <router-view> 占位
           children: [
             {
-              path: 'customers', // 路径变为 /trade/customers
+              path: 'customers',
               name: 'Customers',
               meta: { title: '客户信息' },
               component: () => import('@/views/trade/customers/index.vue'),
             },
             {
-              path: 'orders', // 路径变为 /trade/orders
+              path: 'orders',
               name: 'Orders',
               meta: { title: '订单信息' },
               component: () => import('@/views/trade/orders/index.vue'),
             },
           ],
         },
-        // --- 人事管理 (独立模块) ---
+        // --- 个人中心 (独立模块) ---
         {
-          path: 'hrm', // 对应 UI 上的 "人事管理"
-          name: 'Hrm',
-          meta: { title: '人事管理', icon: 'user' },
-          // 注意：这里不需要 component，或者使用 <router-view> 占位
+          path: 'profile',
+          name: 'Profile',
+          meta: { title: '个人中心', icon: 'user' },
           children: [
             {
-              path: 'employee', // 路径变为 /hrm/employee
+              path: 'info',
+              name: 'Info',
+              meta: { title: '个人信息' },
+              component: () => import('@/views/profile/info/index.vue'),
+            },
+            {
+              path: 'password',
+              name: 'Password',
+              meta: { title: '修改密码' },
+              component: () => import('@/views/profile/password/index.vue'),
+            },
+          ],
+        },
+        {
+          path: 'hrm',
+          name: 'Hrm',
+          meta: { title: '人事管理', icon: 'user' },
+          children: [
+            {
+              path: 'employee',
               name: 'Employee',
               meta: { title: '员工管理' },
               component: () => import('@/views/hrm/employee/index.vue'),
             },
           ],
         },
-        // 考勤管理
         {
-          path: 'attendance', // 对应 UI 上的 "考勤管理"
+          path: 'attendance',
           name: 'Attendance',
           meta: { title: '考勤管理', icon: 'calendar' },
           children: [
@@ -73,14 +110,13 @@ const router = createRouter({
           ]
 
         },
-        // 系统管理
         {
-          path: 'system', // 对应 UI 上的 "系统管理"
+          path: 'system',
           name: 'System',
           meta: {
             title: '系统管理',
             icon: 'setting',
-            roles: ['admin'], // 关键：添加权限标识，只有管理员可见
+            roles: ['admin'],
           },
           children: [
             {
@@ -125,9 +161,9 @@ router.beforeEach((to) => {
 
   // 已登录用户访问登录页，直接进入首页
   if (to.path === '/login') {
-    if (authStore.token) {
-      return '/dashboard';
-    }
+    // if (authStore.token) {
+    //   return '/dashboard';
+    // }
 
     return true;
   }

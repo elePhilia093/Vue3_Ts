@@ -33,3 +33,21 @@ export function deleteEmployee(id: number) {
     method: "delete"
   })
 }
+
+
+export function importEmployeeExcel(data: any){
+  return request({
+    url: "/employee/import",
+    method: "post",
+    data: data
+  })
+}
+
+export function exportEmployeeExcel(params?: any){
+  return request({
+    url: "/employee/export",
+    method: "get",
+    params: params,
+    responseType: "blob"
+  })
+}

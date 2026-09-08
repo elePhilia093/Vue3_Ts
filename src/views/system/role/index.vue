@@ -118,7 +118,7 @@
           background
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
-          :page-sizes="[2, 4, 6, 20]"
+          :page-sizes="[2, 4, 6, 10, 20]"
           :page-size="queryParams.size"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

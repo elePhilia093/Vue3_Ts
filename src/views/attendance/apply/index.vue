@@ -10,9 +10,7 @@
         </div>
 
         <!-- 普通员工和主管可以申请 -->
-        <el-button v-if="!isAdmin" type="primary" @click="openAddDialog">
-          申请请假
-        </el-button>
+        <el-button v-if="!isAdmin" type="primary" @click="openAddDialog"> 申请请假 </el-button>
       </div>
     </el-card>
 
@@ -61,12 +59,7 @@
 
         <!-- 审批状态 -->
         <el-form-item label="状态">
-          <el-select
-            v-model="queryParams.approvalStatus"
-            placeholder="全部"
-            clearable
-            style="width: 150px"
-          >
+          <el-select v-model="queryParams.approvalStatus" placeholder="全部" clearable style="width: 150px">
             <el-option label="待审批" :value="0" />
 
             <el-option label="已通过" :value="1" />
@@ -94,66 +87,31 @@
         empty-text="暂无请假记录"
       >
         <!-- 员工 -->
-        <el-table-column
-          prop="employeeName"
-          label="员工姓名"
-          min-width="110"
-          align="center"
-        />
+        <el-table-column prop="employeeName" label="员工姓名" min-width="110" align="center" />
 
         <!-- 请假类型 -->
-        <el-table-column
-          prop="leaveType"
-          label="请假类型"
-          min-width="100"
-          align="center"
-        >
+        <el-table-column prop="leaveType" label="请假类型" min-width="100" align="center">
           <template #default="{ row }">
             {{ getLeaveTypeText(row.leaveType) }}
           </template>
         </el-table-column>
 
         <!-- 开始时间 -->
-        <el-table-column
-          prop="startTime"
-          label="开始时间"
-          min-width="170"
-          align="center"
-        />
+        <el-table-column prop="startTime" label="开始时间" min-width="170" align="center" />
 
         <!-- 结束时间 -->
-        <el-table-column
-          prop="endTime"
-          label="结束时间"
-          min-width="170"
-          align="center"
-        />
+        <el-table-column prop="endTime" label="结束时间" min-width="170" align="center" />
 
         <!-- 请假天数 -->
-        <el-table-column
-          prop="leaveDays"
-          label="请假天数"
-          min-width="100"
-          align="center"
-        >
+        <el-table-column prop="leaveDays" label="请假天数" min-width="100" align="center">
           <template #default="{ row }"> {{ row.leaveDays }} 天 </template>
         </el-table-column>
 
         <!-- 原因 -->
-        <el-table-column
-          prop="reason"
-          label="请假原因"
-          min-width="180"
-          show-overflow-tooltip
-        />
+        <el-table-column prop="reason" label="请假原因" min-width="180" show-overflow-tooltip />
 
         <!-- 审批状态 -->
-        <el-table-column
-          prop="approvalStatus"
-          label="审批状态"
-          min-width="110"
-          align="center"
-        >
+        <el-table-column prop="approvalStatus" label="审批状态" min-width="110" align="center">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.approvalStatus)" size="small">
               {{ getStatusText(row.approvalStatus) }}
@@ -162,41 +120,27 @@
         </el-table-column>
 
         <!-- 审批人 -->
-        <el-table-column
-          prop="approverName"
-          label="审批人"
-          min-width="110"
-          align="center"
-        >
+        <el-table-column prop="approverName" label="审批人" min-width="110" align="center">
           <template #default="{ row }">
-            {{ row.approverName || "--" }}
+            {{ row.approverName || '--' }}
           </template>
         </el-table-column>
 
         <!-- 审批意见 -->
-        <el-table-column
-          prop="approvalComment"
-          label="审批意见"
-          min-width="160"
-          show-overflow-tooltip
-        >
+        <el-table-column prop="approvalComment" label="审批意见" min-width="160" show-overflow-tooltip>
           <template #default="{ row }">
-            {{ row.approvalComment || "--" }}
+            {{ row.approvalComment || '--' }}
           </template>
         </el-table-column>
 
         <!-- 操作 -->
-        <el-table-column
-          label="操作"
-          min-width="100"
-          fixed="right"
-          align="center"
-        >
+        <el-table-column label="操作" min-width="100" fixed="right" align="center">
           <template #default="{ row }">
             <!-- 主管 / 管理员才能审批 -->
             <el-button
               v-if="(isAdmin || isManager) && row.approvalStatus === 0"
               type="primary"
+              size="small"
               link
               @click="openAuditDialog(row)"
             >
@@ -226,24 +170,10 @@
     <!-- 请假申请弹窗 -->
     <!-- ==================== -->
 
-    <el-dialog
-      v-model="addDialogVisible"
-      title="申请请假"
-      width="520px"
-      destroy-on-close
-    >
-      <el-form
-        ref="addFormRef"
-        :model="addForm"
-        :rules="addRules"
-        label-width="90px"
-      >
+    <el-dialog v-model="addDialogVisible" title="申请请假" width="520px" destroy-on-close>
+      <el-form ref="addFormRef" :model="addForm" :rules="addRules" label-width="90px">
         <el-form-item label="请假类型" prop="leaveType">
-          <el-select
-            v-model="addForm.leaveType"
-            placeholder="请选择请假类型"
-            style="width: 100%"
-          >
+          <el-select v-model="addForm.leaveType" placeholder="请选择请假类型" style="width: 100%">
             <el-option label="事假" :value="1" />
 
             <el-option label="病假" :value="2" />
@@ -289,9 +219,7 @@
       <template #footer>
         <el-button @click="addDialogVisible = false"> 取消 </el-button>
 
-        <el-button type="primary" :loading="submitLoading" @click="submitAdd">
-          提交申请
-        </el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitAdd"> 提交申请 </el-button>
       </template>
     </el-dialog>
 
@@ -299,12 +227,7 @@
     <!-- 审批弹窗 -->
     <!-- ==================== -->
 
-    <el-dialog
-      v-model="auditDialogVisible"
-      title="请假审批"
-      width="560px"
-      destroy-on-close
-    >
+    <el-dialog v-model="auditDialogVisible" title="请假审批" width="560px" destroy-on-close>
       <el-descriptions :column="2" border class="leave-detail">
         <el-descriptions-item label="员工">
           {{ currentLeave.employeeName }}
@@ -322,22 +245,14 @@
           {{ currentLeave.endTime }}
         </el-descriptions-item>
 
-        <el-descriptions-item label="请假天数">
-          {{ currentLeave.leaveDays }} 天
-        </el-descriptions-item>
+        <el-descriptions-item label="请假天数"> {{ currentLeave.leaveDays }} 天 </el-descriptions-item>
 
         <el-descriptions-item label="请假原因" :span="2">
           {{ currentLeave.reason }}
         </el-descriptions-item>
       </el-descriptions>
 
-      <el-form
-        ref="auditFormRef"
-        :model="auditForm"
-        :rules="auditRules"
-        label-width="90px"
-        class="audit-form"
-      >
+      <el-form ref="auditFormRef" :model="auditForm" :rules="auditRules" label-width="90px" class="audit-form">
         <el-form-item label="审批结果" prop="approvalStatus">
           <el-radio-group v-model="auditForm.approvalStatus">
             <el-radio :value="1"> 通过 </el-radio>
@@ -361,22 +276,20 @@
       <template #footer>
         <el-button @click="auditDialogVisible = false"> 取消 </el-button>
 
-        <el-button type="primary" :loading="auditLoading" @click="submitAudit">
-          确定审批
-        </el-button>
+        <el-button type="primary" :loading="auditLoading" @click="submitAudit"> 确定审批 </el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
-
-import { ElMessage, type FormInstance, type FormRules } from "element-plus";
-
-import { addLeave, auditLeave, getLeaveList, type LeaveVO } from "@/api/leave";
-
-import { getEmployeeList } from "@/api/employee";
+import { computed, onMounted, reactive, ref } from 'vue';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+import { addLeave, auditLeave, getLeaveList, type LeaveVO } from '@/api/leave';
+import { getEmployeeList } from '@/api/employee';
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+const userInfo = authStore.userInfo;
 
 /**
  * =========================
@@ -396,19 +309,12 @@ const tableData = ref<LeaveVO[]>([]);
 
 const employeeList = ref<any[]>([]);
 
-/**
- * 暂时沿用当前项目页面的角色写法
- *
- * 正式使用时替换为你项目现有的用户 Store。
- */
-const currentRole = ref("EMPLOYEE");
-
 const isAdmin = computed(() => {
-  return currentRole.value === "ADMIN";
+  return userInfo.roles?.includes('ADMIN') ?? false;
 });
 
 const isManager = computed(() => {
-  return currentRole.value === "MANAGER";
+  return userInfo.roles?.includes('MANAGER') ?? false;
 });
 
 /**
@@ -422,9 +328,9 @@ const todayText = computed(() => {
 
   const year = date.getFullYear();
 
-  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, '0');
 
-  const day = String(date.getDate()).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 });
@@ -440,9 +346,9 @@ const queryParams = reactive({
 
   approvalStatus: undefined as number | undefined,
 
-  startDate: "",
+  startDate: '',
 
-  endDate: "",
+  endDate: '',
 
   current: 1,
 
@@ -462,43 +368,43 @@ const addFormRef = ref<FormInstance>();
 const addForm = reactive({
   leaveType: undefined as number | undefined,
 
-  startTime: "",
+  startTime: '',
 
-  endTime: "",
+  endTime: '',
 
-  reason: "",
+  reason: '',
 });
 
 const addRules: FormRules = {
   leaveType: [
     {
       required: true,
-      message: "请选择请假类型",
-      trigger: "change",
+      message: '请选择请假类型',
+      trigger: 'change',
     },
   ],
 
   startTime: [
     {
       required: true,
-      message: "请选择开始时间",
-      trigger: "change",
+      message: '请选择开始时间',
+      trigger: 'change',
     },
   ],
 
   endTime: [
     {
       required: true,
-      message: "请选择结束时间",
-      trigger: "change",
+      message: '请选择结束时间',
+      trigger: 'change',
     },
   ],
 
   reason: [
     {
       required: true,
-      message: "请输入请假原因",
-      trigger: "blur",
+      message: '请输入请假原因',
+      trigger: 'blur',
     },
   ],
 };
@@ -520,23 +426,23 @@ const auditForm = reactive({
 
   approvalStatus: 1,
 
-  approvalComment: "",
+  approvalComment: '',
 });
 
 const auditRules: FormRules = {
   approvalStatus: [
     {
       required: true,
-      message: "请选择审批结果",
-      trigger: "change",
+      message: '请选择审批结果',
+      trigger: 'change',
     },
   ],
 
   approvalComment: [
     {
       required: true,
-      message: "请输入审批意见",
-      trigger: "blur",
+      message: '请输入审批意见',
+      trigger: 'blur',
     },
   ],
 };
@@ -558,12 +464,12 @@ const loadData = async () => {
 
       total.value = res.data.total || 0;
     } else {
-      ElMessage.error(res.message || "获取请假记录失败");
+      ElMessage.error(res.message || '获取请假记录失败');
     }
   } catch (error) {
     console.error(error);
 
-    ElMessage.error("获取请假记录失败");
+    ElMessage.error('获取请假记录失败');
   } finally {
     loading.value = false;
   }
@@ -617,9 +523,9 @@ const resetQuery = () => {
 
   queryParams.approvalStatus = undefined;
 
-  queryParams.startDate = "";
+  queryParams.startDate = '';
 
-  queryParams.endDate = "";
+  queryParams.endDate = '';
 
   queryParams.current = 1;
 
@@ -645,11 +551,11 @@ const handlePageChange = () => {
 const openAddDialog = () => {
   addForm.leaveType = undefined;
 
-  addForm.startTime = "";
+  addForm.startTime = '';
 
-  addForm.endTime = "";
+  addForm.endTime = '';
 
-  addForm.reason = "";
+  addForm.reason = '';
 
   addDialogVisible.value = true;
 };
@@ -674,12 +580,8 @@ const submitAdd = async () => {
   /**
    * 前端先检查时间顺序
    */
-  if (
-    addForm.startTime &&
-    addForm.endTime &&
-    new Date(addForm.endTime) < new Date(addForm.startTime)
-  ) {
-    ElMessage.warning("结束时间不能早于开始时间");
+  if (addForm.startTime && addForm.endTime && new Date(addForm.endTime) < new Date(addForm.startTime)) {
+    ElMessage.warning('结束时间不能早于开始时间');
 
     return;
   }
@@ -698,18 +600,18 @@ const submitAdd = async () => {
     });
 
     if (res.code === 200) {
-      ElMessage.success("请假申请提交成功");
+      ElMessage.success('请假申请提交成功');
 
       addDialogVisible.value = false;
 
       await loadData();
     } else {
-      ElMessage.error(res.message || "请假申请提交失败");
+      ElMessage.error(res.message || '请假申请提交失败');
     }
   } catch (error) {
     console.error(error);
 
-    ElMessage.error("请假申请提交失败");
+    ElMessage.error('请假申请提交失败');
   } finally {
     submitLoading.value = false;
   }
@@ -730,7 +632,7 @@ const openAuditDialog = (row: LeaveVO) => {
 
   auditForm.approvalStatus = 1;
 
-  auditForm.approvalComment = "";
+  auditForm.approvalComment = '';
 
   auditDialogVisible.value = true;
 };
@@ -764,18 +666,18 @@ const submitAudit = async () => {
     });
 
     if (res.code === 200) {
-      ElMessage.success("审批处理成功");
+      ElMessage.success('审批处理成功');
 
       auditDialogVisible.value = false;
 
       await loadData();
     } else {
-      ElMessage.error(res.message || "审批失败");
+      ElMessage.error(res.message || '审批失败');
     }
   } catch (error) {
     console.error(error);
 
-    ElMessage.error("审批失败");
+    ElMessage.error('审批失败');
   } finally {
     auditLoading.value = false;
   }
@@ -796,19 +698,19 @@ const submitAudit = async () => {
 const getLeaveTypeText = (type: number) => {
   switch (type) {
     case 1:
-      return "事假";
+      return '事假';
 
     case 2:
-      return "病假";
+      return '病假';
 
     case 3:
-      return "年假";
+      return '年假';
 
     case 4:
-      return "其他";
+      return '其他';
 
     default:
-      return "未知";
+      return '未知';
   }
 };
 
@@ -821,16 +723,16 @@ const getLeaveTypeText = (type: number) => {
 const getStatusText = (status: number) => {
   switch (status) {
     case 0:
-      return "待审批";
+      return '待审批';
 
     case 1:
-      return "已通过";
+      return '已通过';
 
     case 2:
-      return "已驳回";
+      return '已驳回';
 
     default:
-      return "未知";
+      return '未知';
   }
 };
 
@@ -843,16 +745,16 @@ const getStatusText = (status: number) => {
 const getStatusType = (status: number) => {
   switch (status) {
     case 0:
-      return "warning";
+      return 'warning';
 
     case 1:
-      return "success";
+      return 'success';
 
     case 2:
-      return "danger";
+      return 'danger';
 
     default:
-      return "info";
+      return 'info';
   }
 };
 
@@ -875,10 +777,10 @@ onMounted(async () => {
   box-sizing: border-box;
 }
 
-
 .search-card {
   flex-shrink: 0;
   margin-bottom: 20px;
+
   .search-form {
     margin-bottom: -18px;
   }
@@ -954,7 +856,6 @@ onMounted(async () => {
 /* =========================
    表格
    ========================= */
-
 
 .empty-text {
   color: #c0c4cc;

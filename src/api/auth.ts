@@ -23,6 +23,7 @@ export function loginAPI(data: LoginDTO) {
 export interface UserInfo {
   userId: number | null
   username: string | null
+  role: Array<string>
 }
 export function userInfoAPI(){
   return request({

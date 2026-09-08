@@ -116,6 +116,7 @@ const handleLogin = () => {
         }
         ElMessage.success("登录成功！");
       } catch (error) {
+        ElMessage.error(error.message || "登录失败");
       } finally {
         loading.value = false;
       }

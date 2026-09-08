@@ -3,15 +3,20 @@
     <el-scrollbar>
       <el-menu router :default-active="route.path" class="custom-menu" background-color="transparent"
         text-color="#e0e6ed" active-text-color="#ffffff" :collapse="false">
-        <el-menu-item index="/dashboard">
+        <!-- <el-menu-item index="/dashboard">
           <el-icon>
             <Odometer />
           </el-icon>
-          <!-- 可选图标 -->
           <span>Dashboard</span>
+        </el-menu-item> -->
+        <!-- 可视化分析 -->
+        <el-menu-item index="/visualization">
+          <el-icon>
+            <Odometer />
+          </el-icon>
+          <span>可视化分析</span>
         </el-menu-item>
-        <!-- 交易管理 -->
-        <el-sub-menu index="/trade">
+        <!-- <el-sub-menu index="/trade">
           <template #title>
             <el-icon>
               <Money />
@@ -22,7 +27,7 @@
           <el-menu-item index="/trade/customers"> 测试页面1 </el-menu-item>
 
           <el-menu-item index="/trade/orders"> 测试页面2 </el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
 
         <!-- 员工管理 -->
         <el-sub-menu index="/hrm">
@@ -47,6 +52,31 @@
 
           <el-menu-item index="/attendance/record"> 考勤记录 </el-menu-item>
           <el-menu-item index="/attendance/apply"> 请假管理 </el-menu-item>
+        </el-sub-menu>
+        <!-- 工资管理 -->
+        <el-menu-item index="/salary">
+          <el-icon>
+            <Money />
+          </el-icon>
+          <span>工资管理</span>
+        </el-menu-item>
+        <!-- 公告管理 -->
+        <el-menu-item index="/announcement">
+          <el-icon>
+            <Notification />
+          </el-icon>
+          <span>公告管理</span>
+        </el-menu-item>
+        <!-- 个人中心 -->
+        <el-sub-menu index="/profile">
+          <template #title>
+            <el-icon>
+              <User />
+            </el-icon>
+            <span>个人中心</span>
+          </template>
+          <el-menu-item index="/profile/info">个人信息</el-menu-item>
+          <el-menu-item index="/profile/password">修改密码 </el-menu-item>
         </el-sub-menu>
 
         <!-- 系统管理 -->

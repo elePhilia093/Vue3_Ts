@@ -12,6 +12,7 @@ export const useAuthStore = defineStore(
     const userInfo = ref<UserInfo | null>({
       userId: 0,
       username: "",
+      role: [],
     });
     // 菜单状态
     const menus = ref([]);

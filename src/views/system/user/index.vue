@@ -83,7 +83,7 @@
       <!-- 分页组件 -->
       <div class="pagination-container">
         <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="total"
-          :page-sizes="[1, 2, 4, 6, 20]" :page-size="queryParams.size" @size-change="handleSizeChange"
+          :page-sizes="[1, 2, 4, 6, 10, 20]" :page-size="queryParams.size" @size-change="handleSizeChange"
           @current-change="handleCurrentChange" />
       </div>
     </el-card>
