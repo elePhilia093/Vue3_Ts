@@ -37,8 +37,6 @@ service.interceptors.response.use(
     if (error.response && error.response.status) {
       const status = error.response.status
       if (status === 403) {
-        console.log('1111');
-        
         ElMessage.error('登录过期，请重新登录')
         // to re-login
         const fullPath = router.currentRoute.value.fullPath

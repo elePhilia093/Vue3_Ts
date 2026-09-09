@@ -26,26 +26,35 @@ export function updateEmployee(data: any) {
   })
 }
 
-
 export function deleteEmployee(id: number) {
   return request({
-    url: api + "/" + id,
+    url: api + "/delete/" + id,
     method: "delete"
   })
 }
 
+/**
+ * Excel 导入
+ */
+export function importEmployeeExcel(file: File) {
 
-export function importEmployeeExcel(data: any){
+  const formData = new FormData()
+
+  formData.append("file", file)
+
   return request({
-    url: "/employee/import",
+    url: api + "/import",
     method: "post",
-    data: data
+    data: formData
   })
 }
 
-export function exportEmployeeExcel(params?: any){
+/**
+ * Excel 导出
+ */
+export function exportEmployeeExcel(params?: any) {
   return request({
-    url: "/employee/export",
+    url: api + "/export",
     method: "get",
     params: params,
     responseType: "blob"
