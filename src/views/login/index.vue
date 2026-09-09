@@ -112,7 +112,7 @@ const handleLogin = () => {
         if (query.redirect) {
           router.push(query.redirect as string);
         } else {
-          router.push("/dashboard");
+          router.push("/");
         }
         ElMessage.success("登录成功！");
       } catch (error) {

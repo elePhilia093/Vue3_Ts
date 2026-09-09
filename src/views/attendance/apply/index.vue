@@ -1,14 +1,8 @@
 <template>
   <div class="leave-container">
     <!-- 操作区 -->
-    <el-card shadow="never" class="operation-card">
+    <el-card v-if="!isAdmin" shadow="never" class="operation-card">
       <div class="operation-content">
-        <div>
-          <div class="operation-title">请假申请</div>
-
-          <div class="operation-desc">提交请假申请后等待审批</div>
-        </div>
-
         <!-- 普通员工和主管可以申请 -->
         <el-button v-if="!isAdmin" type="primary" @click="openAddDialog"> 申请请假 </el-button>
       </div>

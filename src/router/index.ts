@@ -8,15 +8,15 @@ const router = createRouter({
       name: 'layout',
       meta: { title: '首页' },
       component: () => import('@/layout/index.vue'),
-      redirect: '/dashboard',
+      redirect: '/visualization',
       children: [
         // --- 仪表盘 (独立模块) ---
-        {
-          path: 'dashboard',
-          name: 'Dashboard',
-          meta: { title: 'Dashboard', icon: 'dashboard' },
-          component: () => import('@/views/dashboard/index.vue'),
-        },
+        // {
+        //   path: 'dashboard',
+        //   name: 'Dashboard',
+        //   meta: { title: 'Dashboard', icon: 'dashboard' },
+        //   component: () => import('@/views/dashboard/index.vue'),
+        // },
         // --- 可视化分析 (独立模块) ---
         {
           path: 'visualization',

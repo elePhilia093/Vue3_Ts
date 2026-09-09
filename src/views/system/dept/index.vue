@@ -71,12 +71,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           prop="createTime"
           label="创建时间"
           show-overflow-tooltip
           width="160"
-        />
+        /> -->
 
         <el-table-column label="操作" min-width="120">
           <template #default="scope">

@@ -154,6 +154,7 @@ const submitForm = () => {
         emit("submit", submitData);
         visible.value = false;
         ElMessage.success("操作成功");
+        resetForm();
       } catch (error) {
         ElMessage.error("提交失败");
       }

@@ -10,7 +10,7 @@
           <span>Dashboard</span>
         </el-menu-item> -->
         <!-- 可视化分析 -->
-        <el-menu-item index="/visualization">
+        <el-menu-item style="margin: 4px 0" index="/visualization">
           <el-icon>
             <Odometer />
           </el-icon>
@@ -54,14 +54,14 @@
           <el-menu-item index="/attendance/apply"> 请假管理 </el-menu-item>
         </el-sub-menu>
         <!-- 工资管理 -->
-        <el-menu-item index="/salary">
+        <el-menu-item style="margin: 4px 0" index="/salary">
           <el-icon>
             <Money />
           </el-icon>
           <span>工资管理</span>
         </el-menu-item>
         <!-- 公告管理 -->
-        <el-menu-item index="/announcement">
+        <el-menu-item style="margin: 4px 0" index="/announcement">
           <el-icon>
             <Notification />
           </el-icon>
