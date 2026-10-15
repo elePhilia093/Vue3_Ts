@@ -10,7 +10,8 @@
           <span>Dashboard</span>
         </el-menu-item> -->
         <!-- 可视化分析 -->
-        <el-menu-item style="margin: 4px 0" index="/visualization">
+        <el-menu-item v-if="role.includes('ADMIN') || role.includes('MANAGER')" style="margin: 4px 0"
+          index="/visualization">
           <el-icon>
             <Odometer />
           </el-icon>
@@ -24,13 +25,13 @@
             <span>测试管理</span>
           </template>
 
-          <el-menu-item index="/trade/customers"> 测试页面1 </el-menu-item>
+<el-menu-item index="/trade/customers"> 测试页面1 </el-menu-item>
 
-          <el-menu-item index="/trade/orders"> 测试页面2 </el-menu-item>
-        </el-sub-menu> -->
+<el-menu-item index="/trade/orders"> 测试页面2 </el-menu-item>
+</el-sub-menu> -->
 
         <!-- 员工管理 -->
-        <el-sub-menu index="/hrm">
+        <el-sub-menu v-if="role.includes('ADMIN') || role.includes('MANAGER')" index="/hrm">
           <template #title>
             <el-icon>
               <User />
@@ -54,7 +55,7 @@
           <el-menu-item index="/attendance/apply"> 请假管理 </el-menu-item>
         </el-sub-menu>
         <!-- 工资管理 -->
-        <el-menu-item style="margin: 4px 0" index="/salary">
+        <el-menu-item v-if="role.includes('ADMIN') || role.includes('MANAGER')" style="margin: 4px 0" index="/salary">
           <el-icon>
             <Money />
           </el-icon>
@@ -80,7 +81,7 @@
         </el-sub-menu>
 
         <!-- 系统管理 -->
-        <el-sub-menu index="/system">
+        <el-sub-menu v-if="role.includes('ADMIN')" index="/system">
           <template #title>
             <el-icon>
               <Setting />
@@ -103,6 +104,15 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import { ref, onMounted, computed } from 'vue'
+// 导入pinia
+import { useAuthStore } from '@/stores/auth'
+// 主管  管理员  普通用户
+const authStore = useAuthStore()
+
+const role = computed(() => authStore.userInfo?.roles || [])
+
+
 
 const route = useRoute()
 </script>

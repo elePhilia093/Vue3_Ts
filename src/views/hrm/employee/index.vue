@@ -9,7 +9,7 @@
           <el-col :span="8">
             <el-form-item label="员工编号">
               <el-input
-                v-model="queryParams.employeeNo"
+                v-model.trim="queryParams.employeeNo"
                 placeholder="请输入员工编号"
                 clearable
                 style="width: 200px"
@@ -20,7 +20,7 @@
           <el-col :span="8">
             <el-form-item label="员工姓名">
               <el-input
-                v-model="queryParams.employeeName"
+                v-model.trim="queryParams.employeeName"
                 placeholder="请输入员工姓名"
                 clearable
                 style="width: 200px"
