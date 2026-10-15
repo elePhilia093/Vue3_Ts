@@ -9,20 +9,11 @@
       <div class="operation-content">
         <!-- 打卡按钮 -->
         <div class="operation-left">
-          <el-button
-            type="primary"
-            size="large"
-            :disabled="checkInDisabled"
-            @click="handleCheckIn"
-          >
+          <el-button type="primary" size="large" :disabled="checkInDisabled" @click="handleCheckIn">
             上班打卡
           </el-button>
 
-          <el-button
-            type="success"
-            size="large"
-            @click="handleCheckOut"
-          >
+          <el-button type="success" size="large" @click="handleCheckOut">
             下班打卡
           </el-button>
         </div>
@@ -63,41 +54,20 @@
       <el-form :model="queryParams" inline class="search-form">
         <!-- 管理员、主管 -->
         <el-form-item v-if="isAdmin || isManager" label="员工">
-          <el-select
-            v-model="queryParams.employeeId"
-            placeholder="请选择员工"
-            clearable
-            filterable
-            style="width: 180px"
-          >
-            <el-option
-              v-for="employee in employeeList"
-              :key="employee.id"
-              :label="employee.employeeName"
-              :value="employee.id"
-            />
+          <el-select v-model="queryParams.employeeId" placeholder="请选择员工" clearable filterable style="width: 180px">
+            <el-option v-for="employee in employeeList" :key="employee.id" :label="employee.employeeName"
+              :value="employee.id" />
           </el-select>
         </el-form-item>
 
         <!-- 普通员工不显示员工筛选 -->
         <el-form-item label="考勤日期">
-          <el-date-picker
-            v-model="queryParams.attendanceDate"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择日期"
-            clearable
-            style="width: 180px"
-          />
+          <el-date-picker v-model="queryParams.attendanceDate" type="date" value-format="YYYY-MM-DD" placeholder="请选择日期"
+            clearable style="width: 180px" />
         </el-form-item>
 
         <el-form-item label="考勤状态">
-          <el-select
-            v-model="queryParams.attendanceStatus"
-            placeholder="全部"
-            clearable
-            style="width: 160px"
-          >
+          <el-select v-model="queryParams.attendanceStatus" placeholder="全部" clearable style="width: 160px">
             <el-option label="正常" :value="0" />
 
             <el-option label="迟到" :value="1" />
@@ -118,34 +88,19 @@
 
     <!-- 考勤记录 -->
     <el-card shadow="never" class="table-card">
-      <el-table
-        v-loading="loading"
-        :data="tableData"
-        border
-        style="width: 100%"
-        max-height="500"
-        empty-text="暂无考勤记录"
-      >
-        <el-table-column
-          prop="employeeName"
-          label="员工姓名"
-          min-width="120"
-          align="center"
-        />
+      <!-- 导出按钮 -->
+      <el-button type="warning" plain @click="handleExport">
+        <el-icon>
+          <Download />
+        </el-icon>
+        Excel导出
+      </el-button>
+      <el-table v-loading="loading" :data="tableData" border style="width: 100%" max-height="500" empty-text="暂无考勤记录">
+        <el-table-column prop="employeeName" label="员工姓名" min-width="120" align="center" />
 
-        <el-table-column
-          prop="attendanceDate"
-          label="考勤日期"
-          min-width="120"
-          align="center"
-        />
+        <el-table-column prop="attendanceDate" label="考勤日期" min-width="120" align="center" />
 
-        <el-table-column
-          prop="checkInTime"
-          label="上班时间"
-          min-width="120"
-          align="center"
-        >
+        <el-table-column prop="checkInTime" label="上班时间" min-width="120" align="center">
           <template #default="{ row }">
             <span v-if="row.checkInTime" class="time-text">
               {{ row.checkInTime }}
@@ -155,12 +110,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="checkOutTime"
-          label="下班时间"
-          min-width="120"
-          align="center"
-        >
+        <el-table-column prop="checkOutTime" label="下班时间" min-width="120" align="center">
           <template #default="{ row }">
             <span v-if="row.checkOutTime" class="time-text">
               {{ row.checkOutTime }}
@@ -170,12 +120,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="attendanceStatus"
-          label="考勤状态"
-          min-width="120"
-          align="center"
-        >
+        <el-table-column prop="attendanceStatus" label="考勤状态" min-width="120" align="center">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.attendanceStatus)" size="small">
               {{ getStatusText(row.attendanceStatus) }}
@@ -183,46 +128,27 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="lateMinutes"
-          label="迟到"
-          min-width="110"
-          align="center"
-        >
+        <el-table-column prop="lateMinutes" label="迟到" min-width="110" align="center">
           <template #default="{ row }">
-            <span
-              :class="{
-                'abnormal-number': row.lateMinutes > 0,
-              }"
-            >
+            <span :class="{
+              'abnormal-number': row.lateMinutes > 0,
+            }">
               {{ row.lateMinutes || 0 }} 分钟
             </span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="earlyLeaveMinutes"
-          label="早退"
-          min-width="110"
-          align="center"
-        >
+        <el-table-column prop="earlyLeaveMinutes" label="早退" min-width="110" align="center">
           <template #default="{ row }">
-            <span
-              :class="{
-                'abnormal-number': row.earlyLeaveMinutes > 0,
-              }"
-            >
+            <span :class="{
+              'abnormal-number': row.earlyLeaveMinutes > 0,
+            }">
               {{ row.earlyLeaveMinutes || 0 }} 分钟
             </span>
           </template>
         </el-table-column>
 
-        <el-table-column
-          prop="remark"
-          label="备注"
-          min-width="150"
-          align="center"
-        >
+        <el-table-column prop="remark" label="备注" min-width="150" align="center">
           <template #default="{ row }">
             <span v-if="row.remark">
               {{ row.remark }}
@@ -235,15 +161,9 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="queryParams.current"
-          v-model:page-size="queryParams.size"
-          :total="total"
-          :page-sizes="[10, 20, 50]"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handlePageChange"
-          @current-change="handlePageChange"
-        />
+        <el-pagination v-model:current-page="queryParams.current" v-model:page-size="queryParams.size" :total="total"
+          :page-sizes="[10, 20, 50]" layout="total, sizes, prev, pager, next, jumper" @size-change="handlePageChange"
+          @current-change="handlePageChange" />
       </div>
     </el-card>
   </div>
@@ -254,7 +174,7 @@ import { computed, onMounted, reactive, ref } from "vue";
 
 import { ElMessage } from "element-plus";
 
-import { checkIn, checkOut, getAttendanceList } from "@/api/attendance";
+import { checkIn, checkOut, getAttendanceList, exportAttendanceExcel } from "@/api/attendance";
 
 import { getEmployeeList } from "@/api/employee";
 
@@ -628,6 +548,40 @@ const getStatusType = (status: number) => {
   }
 };
 
+
+/**
+ * =========================
+ * 导出
+ * =========================
+ */
+
+const handleExport = async () => {
+  try {
+    const res = await exportAttendanceExcel(queryParams);
+
+    if (res.code === 200) {
+      ElMessage.success("导出成功");
+
+      // 下载文件
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([res.data]));
+      a.download = "考勤记录.xlsx";
+      a.click();
+
+      // 释放内存
+      URL.revokeObjectURL(a.href);
+    } else {
+      ElMessage.error(res.message || "导出失败");
+    }
+  } catch (error) {
+    console.error(error);
+
+    ElMessage.error("导出失败");
+  }
+};
+
+
+
 /**
  * 页面初始化
  */
@@ -650,6 +604,7 @@ onMounted(async () => {
 .search-card {
   flex-shrink: 0;
   margin-bottom: 20px;
+
   .search-form {
     margin-bottom: -18px;
   }

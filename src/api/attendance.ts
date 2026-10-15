@@ -21,3 +21,15 @@ export function checkOut() {
     method: 'post'
   })
 }
+
+/**
+ * Excel 导出
+ */
+export function exportAttendanceExcel(params?: any) {
+  return request({
+    url: '/emp/attendance/export',
+    method: 'get',
+    params: params,
+    responseType: "blob"
+  })
+}

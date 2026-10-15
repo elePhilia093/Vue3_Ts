@@ -23,3 +23,15 @@ export function auditLeave(data: any) {
     data,
   })
 }
+
+/**
+ * Excel 导出
+ */
+export function exportLeaveExcel(params?: any) {
+  return request({
+    url: '/emp/leave/export',
+    method: 'get',
+    params: params,
+    responseType: "blob"
+  })
+}

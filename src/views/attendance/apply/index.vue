@@ -13,42 +13,22 @@
       <el-form :model="queryParams" inline class="search-form">
         <!-- 管理员可以按员工查询 -->
         <el-form-item v-if="isAdmin" label="员工">
-          <el-select
-            v-model="queryParams.employeeId"
-            placeholder="请选择员工"
-            clearable
-            filterable
-            style="width: 180px"
-          >
-            <el-option
-              v-for="employee in employeeList"
-              :key="employee.id"
-              :label="employee.employeeName"
-              :value="employee.id"
-            />
+          <el-select v-model="queryParams.employeeId" placeholder="请选择员工" clearable filterable style="width: 180px">
+            <el-option v-for="employee in employeeList" :key="employee.id" :label="employee.employeeName"
+              :value="employee.id" />
           </el-select>
         </el-form-item>
 
         <!-- 开始日期 -->
         <el-form-item label="开始日期">
-          <el-date-picker
-            v-model="queryParams.startDate"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择日期"
-            clearable
-          />
+          <el-date-picker v-model="queryParams.startDate" type="date" value-format="YYYY-MM-DD" placeholder="请选择日期"
+            clearable />
         </el-form-item>
 
         <!-- 结束日期 -->
         <el-form-item label="结束日期">
-          <el-date-picker
-            v-model="queryParams.endDate"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择日期"
-            clearable
-          />
+          <el-date-picker v-model="queryParams.endDate" type="date" value-format="YYYY-MM-DD" placeholder="请选择日期"
+            clearable />
         </el-form-item>
 
         <!-- 审批状态 -->
@@ -72,14 +52,14 @@
 
     <!-- 请假记录 -->
     <el-card shadow="never" class="table-card">
-      <el-table
-        v-loading="loading"
-        :data="tableData"
-        border
-        max-height="500"
-        style="width: 100%"
-        empty-text="暂无请假记录"
-      >
+      <!-- 导出按钮 -->
+     <el-button type="warning" plain @click="handleExport">
+        <el-icon>
+          <Download />
+        </el-icon>
+        Excel导出
+      </el-button>
+      <el-table v-loading="loading" :data="tableData" border max-height="500" style="width: 100%" empty-text="暂无请假记录">
         <!-- 员工 -->
         <el-table-column prop="employeeName" label="员工姓名" min-width="110" align="center" />
 
@@ -131,13 +111,8 @@
         <el-table-column label="操作" min-width="100" fixed="right" align="center">
           <template #default="{ row }">
             <!-- 主管 / 管理员才能审批 -->
-            <el-button
-              v-if="(isAdmin || isManager) && row.approvalStatus === 0"
-              type="primary"
-              size="small"
-              link
-              @click="openAuditDialog(row)"
-            >
+            <el-button v-if="(isAdmin || isManager) && row.approvalStatus === 0" type="primary" size="small" link
+              @click="openAuditDialog(row)">
               审批
             </el-button>
 
@@ -148,15 +123,9 @@
 
       <!-- 分页 -->
       <div class="pagination">
-        <el-pagination
-          v-model:current-page="queryParams.current"
-          v-model:page-size="queryParams.size"
-          :total="total"
-          :page-sizes="[10, 20, 50]"
-          layout="total, sizes, prev, pager, next, jumper"
-          @size-change="handlePageChange"
-          @current-change="handlePageChange"
-        />
+        <el-pagination v-model:current-page="queryParams.current" v-model:page-size="queryParams.size" :total="total"
+          :page-sizes="[10, 20, 50]" layout="total, sizes, prev, pager, next, jumper" @size-change="handlePageChange"
+          @current-change="handlePageChange" />
       </div>
     </el-card>
 
@@ -179,34 +148,18 @@
         </el-form-item>
 
         <el-form-item label="开始时间" prop="startTime">
-          <el-date-picker
-            v-model="addForm.startTime"
-            type="datetime"
-            value-format="YYYY-MM-DDTHH:mm:ss"
-            placeholder="请选择开始时间"
-            style="width: 100%"
-          />
+          <el-date-picker v-model="addForm.startTime" type="datetime" value-format="YYYY-MM-DDTHH:mm:ss"
+            placeholder="请选择开始时间" style="width: 100%" />
         </el-form-item>
 
         <el-form-item label="结束时间" prop="endTime">
-          <el-date-picker
-            v-model="addForm.endTime"
-            type="datetime"
-            value-format="YYYY-MM-DDTHH:mm:ss"
-            placeholder="请选择结束时间"
-            style="width: 100%"
-          />
+          <el-date-picker v-model="addForm.endTime" type="datetime" value-format="YYYY-MM-DDTHH:mm:ss"
+            placeholder="请选择结束时间" style="width: 100%" />
         </el-form-item>
 
         <el-form-item label="请假原因" prop="reason">
-          <el-input
-            v-model="addForm.reason"
-            type="textarea"
-            :rows="4"
-            maxlength="500"
-            show-word-limit
-            placeholder="请输入请假原因"
-          />
+          <el-input v-model="addForm.reason" type="textarea" :rows="4" maxlength="500" show-word-limit
+            placeholder="请输入请假原因" />
         </el-form-item>
       </el-form>
 
@@ -256,14 +209,8 @@
         </el-form-item>
 
         <el-form-item label="审批意见" prop="approvalComment">
-          <el-input
-            v-model="auditForm.approvalComment"
-            type="textarea"
-            :rows="4"
-            maxlength="500"
-            show-word-limit
-            placeholder="请输入审批意见"
-          />
+          <el-input v-model="auditForm.approvalComment" type="textarea" :rows="4" maxlength="500" show-word-limit
+            placeholder="请输入审批意见" />
         </el-form-item>
       </el-form>
 
@@ -279,7 +226,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
-import { addLeave, auditLeave, getLeaveList, type LeaveVO } from '@/api/leave';
+import { addLeave, auditLeave, getLeaveList, exportLeaveExcel, type LeaveVO } from '@/api/leave';
 import { getEmployeeList } from '@/api/employee';
 import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
@@ -751,6 +698,39 @@ const getStatusType = (status: number) => {
       return 'info';
   }
 };
+
+/**
+ * =========================
+ * 导出
+ * =========================
+ */
+
+const handleExport = async () => {
+  try {
+    const res = await exportLeaveExcel(queryParams);
+
+    if (res.code === 200) {
+      ElMessage.success("导出成功");
+
+      // 下载文件
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([res.data]));
+      a.download = "请假记录.xlsx";
+      a.click();
+
+      // 释放内存
+      URL.revokeObjectURL(a.href);
+    } else {
+      ElMessage.error(res.message || "导出失败");
+    }
+  } catch (error) {
+    console.error(error);
+
+    ElMessage.error("导出失败");
+  }
+};
+
+
 
 /**
  * 页面初始化
