@@ -53,7 +53,7 @@
     <!-- 请假记录 -->
     <el-card shadow="never" class="table-card">
       <!-- 导出按钮 -->
-     <el-button type="warning" plain @click="handleExport">
+     <el-button type="warning" plain @click="handleExport" style="margin-bottom: 10px;">
         <el-icon>
           <Download />
         </el-icon>

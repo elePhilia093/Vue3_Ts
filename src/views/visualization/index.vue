@@ -424,6 +424,11 @@ const renderDeptChart = () => {
   const names = overview.deptStatistics.map((item) => item.deptName);
 
   const values = overview.deptStatistics.map((item) => Number(item.employeeCount));
+  const sum = values.slice(0, -1).reduce((sum, item) => sum + item, 0);
+
+  // 将最后一项赋值为累加和
+  values[values.length - 1] = sum;
+  console.log(values);
 
   const option: EChartsOption = {
     tooltip: {
